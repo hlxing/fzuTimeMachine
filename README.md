@@ -6,9 +6,9 @@
 
 ## 功能逻辑流程图
 
-[功能逻辑流程图](http://hlx-blog.oss-cn-beijing.aliyuncs.com/18-9-18/65724816.jpg)
+![功能逻辑流程图](http://hlx-blog.oss-cn-beijing.aliyuncs.com/18-9-18/65724816.jpg)
 
 ## 功能结构
 
-[功能结构](http://hlx-blog.oss-cn-beijing.aliyuncs.com/18-9-18/99950178.jpg)
+![功能结构](http://hlx-blog.oss-cn-beijing.aliyuncs.com/18-9-18/99950178.jpg)
 
