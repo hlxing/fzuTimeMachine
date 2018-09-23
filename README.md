@@ -6,11 +6,7 @@
 
 ## 功能逻辑流程图
 
-![功能逻辑流程图](http://hlx-blog.oss-cn-beijing.aliyuncs.com/18-9-18/65724816.jpg)
-
-## 功能结构
-
-![功能结构](http://hlx-blog.oss-cn-beijing.aliyuncs.com/18-9-18/99950178.jpg)
+![功能逻辑流程图](https://ws1.sinaimg.cn/large/7343c247ly1fvjwc5uxyij20ur0fvt9e.jpg)
 
 ## 项目成员
 
