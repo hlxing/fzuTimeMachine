@@ -1,4 +1,4 @@
-# fzuTimeMachine
+﻿# fzuTimeMachine
 
 ## 项目介绍
 
@@ -16,5 +16,12 @@
 
 ### 参与开发
 
-文档参见[BACKEND.md](https://github.com/hlxing/fzuTimeMachine/blob/master/BACKEND.md)，任何未遵循该规范的代码将拒绝合并。Pull Request前请仔细阅读该文档，如有问题可提ISSUE或私聊我
+规范文档参见[BACKEND.md](https://github.com/hlxing/fzuTimeMachine/blob/master/BACKEND.md)，任何未遵循该规范的代码将拒绝合并。Pull Request前请仔细阅读该文档，如有问题可提ISSUE或私聊我
 
+### 接口文档
+
+接口文档参见[INTERFACE.md](https://github.com/hlxing/fzuTimeMachine/blob/master/INTERFACE.md)，包括接口概要及其具体说明
+
+### 环境准备
+
+JDK1.8+Intellij IDEA+Mysql+Redis
