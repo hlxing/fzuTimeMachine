@@ -1,9 +1,11 @@
 package com.west2.fzuTimeMachine;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@MapperScan("com.west2.fzuTimeMachine.dao")
 public class FzuTimeMachineApplication {
 
 	public static void main(String[] args) {

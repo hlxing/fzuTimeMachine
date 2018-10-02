@@ -12,7 +12,9 @@
 
 小黄数名，小叶数名，小钱一名，小沈一名
 
-## 后端开发规范
+## 后端
+
+### 参与开发
 
 文档参见[BACKEND.md](https://github.com/hlxing/fzuTimeMachine/blob/master/BACKEND.md)，任何未遵循该规范的代码将拒绝合并。Pull Request前请仔细阅读该文档，如有问题可提ISSUE或私聊我
 
