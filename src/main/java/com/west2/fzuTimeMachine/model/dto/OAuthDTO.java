@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
- * @description: 微信授权回调的传输对象
+ * @description: 用户授权回调的传输对象
  * @author: hlx 2018-10-01
  **/
 @Data
