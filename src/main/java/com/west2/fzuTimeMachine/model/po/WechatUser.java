@@ -16,6 +16,9 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WechatUser implements Serializable{
 
+    @JsonProperty("userId")
+    private Integer userId;
+
     @JsonProperty("country")
     private String country;
 
