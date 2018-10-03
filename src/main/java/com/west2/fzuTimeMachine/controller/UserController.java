@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
@@ -42,6 +43,16 @@ public class UserController {
     @GetMapping("/login")
     public ApiResult<String> login(@RequestParam("code") @Size(min = 1,max = 255) String code,HttpServletRequest request) {
         userService.login(code,request);
+        ApiResult<String> apiResult = new ApiResult<>();
+        apiResult.setText("login success");
+        return apiResult;
+    }
+
+    @ApiOperation(value = "模拟登录", notes = "模拟微信登录,测试专用")
+    @GetMapping("/xLogin")
+    public ApiResult<String> xLogin(HttpSession session) {
+        session.setAttribute("userId", 1);
+
         ApiResult<String> apiResult = new ApiResult<>();
         apiResult.setText("login success");
         return apiResult;
