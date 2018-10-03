@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.west2.fzuTimeMachine.dao.UserDao">
 
-	<insert id="save" parameterType="WechatUser">
+	<insert id="save" parameterType="WechatUser" keyProperty="userId" useGeneratedKeys="true">
 		INSERT INTO
 			wechat_user(userId,openId, nickName, gender, avatarUrl, country, province, city, language, createTime)
 		VALUES

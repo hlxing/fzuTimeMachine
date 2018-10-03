@@ -43,13 +43,12 @@ public class UserServiceImpl implements UserService {
         }
         log.info("session->>" + jscode2session);
         HttpSession httpSession = request.getSession(true);
-        httpSession.setAttribute("openid",jscode2session.getOpenid());
         httpSession.setAttribute("sessionKey",jscode2session.getSessionKey());
 
-        // TODO:异步执行以下方法
         WechatUser wechatUser = WechatUtil.decryptUser(jscode2session.getSessionKey(), oAuthDTO.getEncryptedData(), oAuthDTO.getIvStr());
         wechatUser.setCreateTime(System.currentTimeMillis()/1000);
         userDao.save(wechatUser);
+        httpSession.setAttribute("userId",wechatUser.getUserId());
         log.info("wechatUser->>" + wechatUser);
     }
 
@@ -66,7 +65,7 @@ public class UserServiceImpl implements UserService {
         }
         log.info("session->>" + jscode2session);
         HttpSession httpSession = request.getSession(true);
-        httpSession.setAttribute("openid",jscode2session.getOpenid());
+        httpSession.setAttribute("userId",wechatUser.getUserId());
         httpSession.setAttribute("sessionKey",jscode2session.getSessionKey());
     }
 
