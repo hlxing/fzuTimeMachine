@@ -11,11 +11,23 @@
  Target Server Version : 50149
  File Encoding         : 65001
 
- Date: 04/10/2018 10:12:30
+ Date: 04/10/2018 22:53:21
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for collection
+-- ----------------------------
+DROP TABLE IF EXISTS `collection`;
+CREATE TABLE `collection`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NULL DEFAULT NULL,
+  `timeId` int(11) NULL DEFAULT NULL,
+  `createTime` bigint(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for time
