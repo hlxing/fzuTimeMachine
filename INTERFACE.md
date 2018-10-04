@@ -59,3 +59,13 @@
 ### 2.采用redis作为缓存
 
 ### 3.优化tomcat配置
+
+## 基础Api
+
+### 1.GET /user/xLogin 进行模拟登陆,获取S-TOKEN
+
+### 2.后续的请求头部带上S-TOKEN,接口开发过程中,可通过httpSession获取唯一用户id,示例代码:  
+```
+HttpSession httpSession = request.getSession(false);
+Integer userId = (Integer) session.getAttribute("userId");
+```
