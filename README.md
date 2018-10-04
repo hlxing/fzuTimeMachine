@@ -30,6 +30,8 @@ JDK1.8+Intellij IDEA+Mysql+Redis+Natapp(可选)
 
 #### 4.安装并启动natapp(可选,小程序授权回调及七牛云oos上传回调专用),并修改application.yml
 
+#### 5.启动项目,打开[swagger2接口页面](http://localhost/swagger-ui.html#/)
+
 ### 接口文档
 
 接口文档参见[INTERFACE.md](https://github.com/hlxing/fzuTimeMachine/blob/master/INTERFACE.md)，包括接口概要及其具体说明
