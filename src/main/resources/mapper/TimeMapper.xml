@@ -20,5 +20,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE
 			id = #{id}
 	</update>
-
+	<select id="getById" resultMap="Time">
+		SELECT
+			   userId, title, imgUrl, content, longitude, latitude, createTime, updateTime, label, praiseNum, checkStatus
+		FROM time
+		WHERE id = #{id}
+	</select>
+	<update id="updateById" parameterType="Time">
+		UPDATE
+			time
+		SET
+			<if test="userId != null">
+				userId = #{userId},
+			</if>
+			<if test="title != null">
+				title = #{title},
+			</if>
+			<if test="imgUrl != null">
+				imgUrl = #{imgUrl},
+			</if>
+			<if test="content != null">
+				content = #{congten},
+			</if>
+			<if test="lomgitude != null">
+				longitude = #{longitude},
+			</if>
+			<if test="latitude != null">
+				latitude = #{latitude},
+			</if>
+			<if test="label != null">
+				label = #{label},
+			</if>
+			<if test="praiseNum != null">
+				praiseNum = #{praiseNum},
+			</if>
+			<if test="checkStatus != null">
+				checkStatus = #{checkStatus}
+			</if>
+		WHERE
+			id = #{id}
+	</update>
 </mapper>  
