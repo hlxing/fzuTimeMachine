@@ -22,6 +22,7 @@ public class UploadDTO implements Serializable{
     private String label;
 
     public UploadDTO() {
+
     }
 
 }

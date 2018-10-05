@@ -12,4 +12,8 @@ public interface TimeDao {
     void save(Time time);
 
     void updateStatus(@Param("id") Integer id, @Param("status") Integer status);
+
+    void getById(@Param("id") Integer id);
+
+    void updateById(Time time);
 }
