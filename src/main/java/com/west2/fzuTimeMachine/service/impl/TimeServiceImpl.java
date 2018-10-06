@@ -6,6 +6,7 @@ import com.west2.fzuTimeMachine.config.QiniuConfig;
 import com.west2.fzuTimeMachine.dao.TimeDao;
 import com.west2.fzuTimeMachine.exception.error.ApiException;
 import com.west2.fzuTimeMachine.exception.error.TimeErrorEnum;
+import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.UploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.UploadDTO;
 import com.west2.fzuTimeMachine.model.po.Time;
@@ -94,5 +95,14 @@ public class TimeServiceImpl implements TimeService {
             throw new ApiException(TimeErrorEnum.BACK_INVALID);
         }
     }
+    @Override
+    public void update(TimeUpdateDTO timeUpdateDTO){
 
+        Time time = timeDao.getById(timeUpdateDTO.getTimeId());
+        if(time != null){
+            timeDao.updateById(modelMapper.map(timeUpdateDTO,Time.class));
+        }else{
+            throw new ApiException(TimeErrorEnum.NOT_FOUND);
+        }
+    }
 }
