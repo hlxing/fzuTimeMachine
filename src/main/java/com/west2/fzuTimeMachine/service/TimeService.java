@@ -1,5 +1,6 @@
 package com.west2.fzuTimeMachine.service;
 
+import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.UploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.UploadDTO;
 import com.west2.fzuTimeMachine.model.vo.UploadVO;
@@ -24,5 +25,8 @@ public interface TimeService {
      * @param uploadBackDTO 上传回调传输对象
      */
     void uploadBack(UploadBackDTO uploadBackDTO);
-
+    /**
+     * 时光内容更新
+     */
+    void update(TimeUpdateDTO timeUpdateDTO);
 }
