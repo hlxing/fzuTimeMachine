@@ -7,10 +7,10 @@ import com.west2.fzuTimeMachine.dao.TimeDao;
 import com.west2.fzuTimeMachine.exception.error.ApiException;
 import com.west2.fzuTimeMachine.exception.error.TimeErrorEnum;
 import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
-import com.west2.fzuTimeMachine.model.dto.UploadBackDTO;
-import com.west2.fzuTimeMachine.model.dto.UploadDTO;
+import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
+import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.po.Time;
-import com.west2.fzuTimeMachine.model.vo.UploadVO;
+import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
 import com.west2.fzuTimeMachine.service.TimeService;
 import com.west2.fzuTimeMachine.util.AESUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -46,12 +46,12 @@ public class TimeServiceImpl implements TimeService {
     }
 
     @Override
-    public UploadVO upload(UploadDTO uploadDTO, Integer userId) {
+    public TimeUploadVO upload(TimeUploadDTO timeUploadDTO, Integer userId) {
         String key = String.valueOf(UUID.randomUUID()).replace("-","");
         log.info("key->>" + key);
 
         // 保存Time->>
-        Time time = modelMapper.map(uploadDTO, Time.class);
+        Time time = modelMapper.map(timeUploadDTO, Time.class);
         // -1为图片尚未上传,上传成功后设置为0
         time.setCheckStatus(-1);
         // 图片地址为:七牛云域名+key
@@ -68,9 +68,9 @@ public class TimeServiceImpl implements TimeService {
         // AES加密timeId,后续用来校验回调消息的合法性
         String timeId = String.valueOf(time.getId());
         String encryptedId = AESUtil.encrypt(timeId, qiniuConfig.getBackSecretKey());
-        UploadBackDTO uploadBackDTO = new UploadBackDTO(timeId, encryptedId);
+        TimeUploadBackDTO timeUploadBackDTO = new TimeUploadBackDTO(timeId, encryptedId);
         try {
-            String uploadBackDTOJson = jsonMapper.writeValueAsString(uploadBackDTO);
+            String uploadBackDTOJson = jsonMapper.writeValueAsString(timeUploadBackDTO);
             // 添加回调数据
             qiniuConfig.getStringMap()
                     .put("callbackBody", uploadBackDTOJson);
@@ -78,29 +78,28 @@ public class TimeServiceImpl implements TimeService {
             e.printStackTrace();
         }
 
-        UploadVO uploadVO = new UploadVO();
-        uploadVO.setKey(key);
-        uploadVO.setUploadToken(qiniuConfig.createToken(key));
-        return uploadVO;
+        TimeUploadVO timeUploadVO = new TimeUploadVO();
+        timeUploadVO.setKey(key);
+        timeUploadVO.setUploadToken(qiniuConfig.createToken(key));
+        return timeUploadVO;
     }
 
     @Override
-    public void uploadBack(UploadBackDTO uploadBackDTO) {
+    public void uploadBack(TimeUploadBackDTO timeUploadBackDTO) {
         // 校验回调消息是否正确
-        String rightKey = AESUtil.decrypt(uploadBackDTO.getEncryptedId(), qiniuConfig.getBackSecretKey());
-        if (rightKey != null && uploadBackDTO.getId().equals(rightKey)) {
+        String rightKey = AESUtil.decrypt(timeUploadBackDTO.getEncryptedId(), qiniuConfig.getBackSecretKey());
+        if (rightKey != null && timeUploadBackDTO.getId().equals(rightKey)) {
             // 更新时光状态为待审核0
-            timeDao.updateStatus(Integer.valueOf(uploadBackDTO.getId()),0);
+            timeDao.updateStatus(Integer.valueOf(timeUploadBackDTO.getId()),0);
         }else{
             throw new ApiException(TimeErrorEnum.BACK_INVALID);
         }
     }
     @Override
     public void update(TimeUpdateDTO timeUpdateDTO){
-
         Time time = timeDao.getById(timeUpdateDTO.getTimeId());
         if(time != null){
-            timeDao.updateById(modelMapper.map(timeUpdateDTO,Time.class));
+            timeDao.update(modelMapper.map(timeUpdateDTO,Time.class));
         }else{
             throw new ApiException(TimeErrorEnum.NOT_FOUND);
         }
