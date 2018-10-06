@@ -7,7 +7,9 @@ package com.west2.fzuTimeMachine.exception.error;
 public enum TimeErrorEnum implements ApiError{
 
     // 回调消息错误
-    BACK_INVALID(130,"BACK_INVALID");
+    BACK_INVALID(130,"BACK_INVALID"),
+    // 找不到时光
+    NOT_FOUND(131,"NOT_FOUND");
 
     private Integer code;
 

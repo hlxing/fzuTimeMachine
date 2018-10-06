@@ -1,5 +1,6 @@
 package com.west2.fzuTimeMachine.controller;
 
+import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.UploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.UploadDTO;
 import com.west2.fzuTimeMachine.model.po.ApiResult;
@@ -47,5 +48,12 @@ public class TimeController {
         return apiResult;
     }
 
+    @ApiOperation(value = "时光修改", notes = "修改时光标题、内容、标签")
+    @PostMapping("/update")
+    public ApiResult<String> updateTime(@RequestBody TimeUpdateDTO timeUpdateDTO) {
+        ApiResult<String> apiResult = new ApiResult<>();
+        timeService.update(timeUpdateDTO);
+        return apiResult;
+    }
 
 }
