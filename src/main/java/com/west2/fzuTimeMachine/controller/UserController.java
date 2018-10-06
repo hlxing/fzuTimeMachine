@@ -1,6 +1,6 @@
 package com.west2.fzuTimeMachine.controller;
 
-import com.west2.fzuTimeMachine.model.dto.OAuthDTO;
+import com.west2.fzuTimeMachine.model.dto.UserOAuthDTO;
 import com.west2.fzuTimeMachine.model.po.ApiResult;
 import com.west2.fzuTimeMachine.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -32,8 +32,8 @@ public class UserController {
 
     @ApiOperation(value = "授权注册", notes = "第一次访问时需要,注册完成的同时完成登录,不需要进行登录")
     @PostMapping("/oauth")
-    public ApiResult<String> oauth(@Valid @RequestBody OAuthDTO oAuthDTO, HttpServletRequest request) {
-        userService.oauth(oAuthDTO, request);
+    public ApiResult<String> oauth(@RequestBody @Valid UserOAuthDTO userOAuthDTO, HttpServletRequest request) {
+        userService.oauth(userOAuthDTO, request);
         ApiResult<String> apiResult = new ApiResult<>();
         apiResult.setText("oauth success");
         return apiResult;

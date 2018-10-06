@@ -3,7 +3,7 @@ package com.west2.fzuTimeMachine.service.impl;
 import com.west2.fzuTimeMachine.dao.UserDao;
 import com.west2.fzuTimeMachine.exception.error.ApiException;
 import com.west2.fzuTimeMachine.exception.error.UserErrorEnum;
-import com.west2.fzuTimeMachine.model.dto.OAuthDTO;
+import com.west2.fzuTimeMachine.model.dto.UserOAuthDTO;
 import com.west2.fzuTimeMachine.model.po.Jscode2session;
 import com.west2.fzuTimeMachine.model.po.WechatUser;
 import com.west2.fzuTimeMachine.service.UserService;
@@ -31,9 +31,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void oauth(OAuthDTO oAuthDTO, HttpServletRequest request) {
-        log.info("oAuthDTO->>" + oAuthDTO);
-        Jscode2session jscode2session = WechatUtil.getJscode2session(oAuthDTO.getCode());
+    public void oauth(UserOAuthDTO userOAuthDTO, HttpServletRequest request) {
+        log.info("userOAuthDTO->>" + userOAuthDTO);
+        Jscode2session jscode2session = WechatUtil.getJscode2session(userOAuthDTO.getCode());
         if (null == jscode2session) {
             throw new ApiException(UserErrorEnum.CODE_INVALID);
         }
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         HttpSession httpSession = request.getSession(true);
         httpSession.setAttribute("sessionKey",jscode2session.getSessionKey());
 
-        WechatUser wechatUser = WechatUtil.decryptUser(jscode2session.getSessionKey(), oAuthDTO.getEncryptedData(), oAuthDTO.getIvStr());
+        WechatUser wechatUser = WechatUtil.decryptUser(jscode2session.getSessionKey(), userOAuthDTO.getEncryptedData(), userOAuthDTO.getIvStr());
         wechatUser.setCreateTime(System.currentTimeMillis()/1000);
         userDao.save(wechatUser);
         httpSession.setAttribute("userId",wechatUser.getUserId());
