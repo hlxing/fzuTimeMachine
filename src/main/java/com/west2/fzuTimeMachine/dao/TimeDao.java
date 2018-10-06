@@ -15,7 +15,6 @@ public interface TimeDao {
 
     Time getById(@Param("id") Integer id);
 
-    void updateById(Time time);
-
+    void update(Time time);
 
 }

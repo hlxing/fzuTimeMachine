@@ -9,16 +9,16 @@ import java.io.Serializable;
  * @author: hlx 2018-10-03
  **/
 @Data
-public class UploadBackDTO implements Serializable{
+public class TimeUploadBackDTO implements Serializable{
 
     private String id;
 
     private String encryptedId;
 
-    public UploadBackDTO() {
+    public TimeUploadBackDTO() {
     }
 
-    public UploadBackDTO(String id, String encryptedId) {
+    public TimeUploadBackDTO(String id, String encryptedId) {
         this.id = id;
         this.encryptedId = encryptedId;
     }
