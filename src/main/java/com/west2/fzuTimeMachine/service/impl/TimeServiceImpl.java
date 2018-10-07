@@ -10,6 +10,7 @@ import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.po.Time;
+import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
 import com.west2.fzuTimeMachine.service.TimeService;
 import com.west2.fzuTimeMachine.util.AESUtil;
@@ -18,6 +19,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -97,11 +100,32 @@ public class TimeServiceImpl implements TimeService {
     }
     @Override
     public void update(TimeUpdateDTO timeUpdateDTO){
-        Time time = timeDao.getById(timeUpdateDTO.getTimeId());
+        Time time = timeDao.get(timeUpdateDTO.getTimeId());
         if(time != null){
             timeDao.update(modelMapper.map(timeUpdateDTO,Time.class));
         }else{
             throw new ApiException(TimeErrorEnum.NOT_FOUND);
         }
+    }
+
+    @Override
+    public void delete(Integer timeId) {
+        Time time = timeDao.get(timeId);
+        if (time != null) {
+            timeDao.delete(timeId);
+        }else{
+            throw new ApiException(TimeErrorEnum.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public List<TimeMeVO> getMe(Integer userId) {
+        List<Time> timeList = timeDao.getByUserId(userId);
+        List<TimeMeVO> timeMeVOList = new ArrayList<>();
+        for (Time time : timeList) {
+            TimeMeVO timeMeVO = modelMapper.map(time, TimeMeVO.class);
+            timeMeVOList.add(timeMeVO);
+        }
+        return timeMeVOList;
     }
 }

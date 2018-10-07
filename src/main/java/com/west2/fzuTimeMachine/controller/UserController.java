@@ -3,6 +3,7 @@ package com.west2.fzuTimeMachine.controller;
 import com.west2.fzuTimeMachine.model.dto.UserOAuthDTO;
 import com.west2.fzuTimeMachine.model.po.ApiResult;
 import com.west2.fzuTimeMachine.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "登录", notes = "已经授权的情况下进行")
+    @ApiImplicitParam(name = "code", value = "微信短期凭证")
     @GetMapping("/login")
     public ApiResult<String> login(@RequestParam("code") @Size(min = 1,max = 255) String code,HttpServletRequest request) {
         userService.login(code,request);
@@ -52,7 +54,6 @@ public class UserController {
     @GetMapping("/xLogin")
     public ApiResult<String> xLogin(HttpSession session) {
         session.setAttribute("userId", 1);
-
         ApiResult<String> apiResult = new ApiResult<>();
         apiResult.setText("login success");
         return apiResult;
