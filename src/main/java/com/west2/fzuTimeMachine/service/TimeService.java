@@ -3,7 +3,10 @@ package com.west2.fzuTimeMachine.service;
 import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
+import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
+
+import java.util.List;
 
 
 /**
@@ -30,4 +33,17 @@ public interface TimeService {
      * 时光内容更新
      */
     void update(TimeUpdateDTO timeUpdateDTO);
+
+    /**
+     * 时光删除
+     * @param timeId 时光id
+     */
+    void delete(Integer timeId);
+
+    /**
+     * 获取自己发布的时光
+     * @param userId 用户id
+     * @return 自己时光VO
+     */
+    List<TimeMeVO> getMe(Integer userId);
 }
