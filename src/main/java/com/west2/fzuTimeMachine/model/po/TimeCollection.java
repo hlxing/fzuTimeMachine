@@ -5,11 +5,11 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * @description: 收藏
+ * @description: 时光收藏
  * @author: hlx 2018-10-04
  **/
 @Data
-public class Collection implements Serializable{
+public class TimeCollection implements Serializable{
 
     private Integer id;
 
@@ -19,7 +19,7 @@ public class Collection implements Serializable{
 
     private Long createTime;
 
-    public Collection() {
+    public TimeCollection() {
     }
 
 }
