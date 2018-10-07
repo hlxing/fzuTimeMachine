@@ -4,8 +4,10 @@ import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
 import com.west2.fzuTimeMachine.model.po.ApiResult;
+import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
 import com.west2.fzuTimeMachine.service.TimeService;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @description: 时光控制层
@@ -54,6 +58,25 @@ public class TimeController {
         ApiResult<String> apiResult = new ApiResult<>();
         timeService.update(timeUpdateDTO);
         apiResult.setText("update time success");
+        return apiResult;
+    }
+
+    @ApiOperation(value = "时光删除", notes = "需要管理员权限")
+    @ApiImplicitParam(name = "timeId", value = "时光id")
+    @GetMapping("/delete")
+    public ApiResult<String> delete(@RequestParam("timeId") @NotNull Integer timeId){
+        ApiResult<String> apiResult = new ApiResult<>();
+        timeService.delete(timeId);
+        apiResult.setText("delete success");
+        return apiResult;
+    }
+
+    @ApiOperation(value = "我的时光", notes = "获取历史发布的时光")
+    @GetMapping("/me")
+    public ApiResult<List<TimeMeVO>> get(HttpSession session) {
+        ApiResult<List<TimeMeVO>> apiResult = new ApiResult<>();
+        List<TimeMeVO> timeMeVOList = timeService.getMe((Integer) session.getAttribute("userId"));
+        apiResult.setData(timeMeVOList);
         return apiResult;
     }
 

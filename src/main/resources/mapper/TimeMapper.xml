@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			id = #{id}
 	</update>
 
-	<select id="getById" resultMap="Time">
+	<select id="get" resultType="Time">
 		SELECT
 			userId, title, imgUrl, content, longitude, latitude, createTime, updateTime, label, praiseNum, checkStatus
 		FROM
@@ -46,4 +46,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE
 			id = #{id}
 	</update>
+
+	<delete id="delete">
+		DELETE
+		FROM
+			time
+		WHERE
+			id = #{id}
+	</delete>
+
+	<select id="getByUserId" resultType="Time">
+		SELECT
+			title, imgUrl, content, createTime, updateTime, label, praiseNum
+		FROM
+			time
+	  	WHERE
+			userId = #{userId}
+	</select>
 </mapper>  

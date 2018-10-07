@@ -81,7 +81,10 @@ PS：@description写上关于该类的描述，不超过一行
 
 ### Swagger
 
-所有控制层的接口和DTO模型(前端传输过来的对象)均加上swagger相关注解，具体看项目已有代码
+所有控制层的接口和DTO模型(前端传输过来的对象)均加上swagger相关注解，具体看项目已有代码  
+控制层: @ApiOperation (必选) + @ApiImplicitParam (可选,当参数不为DTO时必须加上)  
+DTO: @ApiModel (必选) + @ApiModelProperty (必选)
+
 
 ## 5.控制层响应
 
