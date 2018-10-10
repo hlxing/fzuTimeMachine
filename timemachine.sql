@@ -11,23 +11,11 @@
  Target Server Version : 50149
  File Encoding         : 65001
 
- Date: 04/10/2018 22:53:21
+ Date: 10/10/2018 21:16:00
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for collection
--- ----------------------------
-DROP TABLE IF EXISTS `collection`;
-CREATE TABLE `collection`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `userId` int(11) NULL DEFAULT NULL,
-  `timeId` int(11) NULL DEFAULT NULL,
-  `createTime` bigint(20) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for time
@@ -53,6 +41,30 @@ CREATE TABLE `time`  (
 -- Records of time
 -- ----------------------------
 INSERT INTO `time` VALUES (13, 1, 'a nice day', 'cloud.huanglexing.com/17d906da2a0442d482db49a9646bd368', 'a b c d e', 57, 113, 1538579661161, 1538579661161, 'happy', 0, 0);
+
+-- ----------------------------
+-- Table structure for time_collection
+-- ----------------------------
+DROP TABLE IF EXISTS `time_collection`;
+CREATE TABLE `time_collection`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NULL DEFAULT NULL,
+  `timeId` int(11) NULL DEFAULT NULL,
+  `createTime` bigint(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for time_praise
+-- ----------------------------
+DROP TABLE IF EXISTS `time_praise`;
+CREATE TABLE `time_praise`  (
+  `id` int(11) NOT NULL,
+  `userId` int(11) NULL DEFAULT NULL,
+  `timeId` int(11) NULL DEFAULT NULL,
+  `createTime` bigint(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for wechat_user
