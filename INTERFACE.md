@@ -2,7 +2,7 @@
 
 ## 概要
 
-![interface](http://hlx-blog.oss-cn-beijing.aliyuncs.com/18-10-2/88793019.jpg)
+![interface](http://hlx-blog.oss-cn-beijing.aliyuncs.com/18-10-10/48068802.jpg)
 
 ## 说明
 
@@ -43,6 +43,12 @@
 * 时光分布：返回所有时光的经纬度
 
 * 流量统计：统计每天的流量
+
+### 4.小黑
+
+* IP封禁：略
+
+* 用户封禁：略
 
 ## 技术关键点
 

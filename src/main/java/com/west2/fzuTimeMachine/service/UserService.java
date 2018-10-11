@@ -1,6 +1,6 @@
 package com.west2.fzuTimeMachine.service;
 
-import com.west2.fzuTimeMachine.model.dto.OAuthDTO;
+import com.west2.fzuTimeMachine.model.dto.UserOAuthDTO;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,10 +12,10 @@ public interface UserService {
 
     /**
      * 微信授权注册,获取用户信息并入库
-     * @param oAuthDTO 授权传输对象
+     * @param userOAuthDTO 授权传输对象
      * @param request httpServletRequest,创建HttpSession
      */
-    void oauth(OAuthDTO oAuthDTO, HttpServletRequest request);
+    void oauth(UserOAuthDTO userOAuthDTO, HttpServletRequest request);
 
 
     /**
