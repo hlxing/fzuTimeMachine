@@ -3,6 +3,8 @@ package com.west2.fzuTimeMachine.dao;
 import com.west2.fzuTimeMachine.model.po.Time;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * @description: 时光DAO
  * @author: hlx 2018-10-03
@@ -13,9 +15,11 @@ public interface TimeDao {
 
     void updateStatus(@Param("id") Integer id, @Param("status") Integer status);
 
-    Time getById(@Param("id") Integer id);
+    Time get(@Param("id") Integer id);
 
-    void updateById(Time time);
+    void update(Time time);
 
+    void delete(Integer timeId);
 
+    List<Time> getByUserId(Integer userId);
 }

@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 public class TimeUpdateDTO implements Serializable {
 
-    private int timeId;
+    private Integer timeId;
 
     private String title;
 
