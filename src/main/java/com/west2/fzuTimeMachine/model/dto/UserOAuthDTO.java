@@ -13,7 +13,7 @@ import java.io.Serializable;
  **/
 @Data
 @ApiModel(description = "授权注册传输对象")
-public class OAuthDTO implements Serializable{
+public class UserOAuthDTO implements Serializable{
 
     // 短期凭证
     @Size(min = 1)
@@ -30,6 +30,6 @@ public class OAuthDTO implements Serializable{
     @ApiModelProperty(required = true, name = "iv字符串", example = "ZNt76BcMNcyiZ3q1T62w/Q==")
     private String ivStr;
 
-    public OAuthDTO() {
+    public UserOAuthDTO() {
     }
 }
