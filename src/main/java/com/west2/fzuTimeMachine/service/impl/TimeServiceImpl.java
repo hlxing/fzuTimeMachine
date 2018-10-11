@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.west2.fzuTimeMachine.config.QiniuConfig;
 import com.west2.fzuTimeMachine.dao.TimeDao;
+import com.west2.fzuTimeMachine.dao.TimePraiseDao;
 import com.west2.fzuTimeMachine.exception.error.ApiException;
 import com.west2.fzuTimeMachine.exception.error.TimeErrorEnum;
 import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.po.Time;
+import com.west2.fzuTimeMachine.model.po.TimePraise;
 import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
 import com.west2.fzuTimeMachine.service.TimeService;
@@ -39,13 +41,16 @@ public class TimeServiceImpl implements TimeService {
 
     private TimeDao timeDao;
 
+    private TimePraiseDao timePraiseDao;
+
     @Autowired
     public TimeServiceImpl(QiniuConfig qiniuConfig, ObjectMapper jsonMapper,
-                           ModelMapper modelMapper, TimeDao timeDao) {
+                           ModelMapper modelMapper, TimeDao timeDao,TimePraiseDao timePraiseDao) {
         this.qiniuConfig = qiniuConfig;
         this.jsonMapper = jsonMapper;
         this.modelMapper = modelMapper;
         this.timeDao = timeDao;
+        this.timePraiseDao = timePraiseDao;
     }
 
     @Override
@@ -127,5 +132,30 @@ public class TimeServiceImpl implements TimeService {
             timeMeVOList.add(timeMeVO);
         }
         return timeMeVOList;
+    }
+    @Override
+    public void praise(Integer timeId,Integer userId){
+
+            TimePraise timePraise = timePraiseDao.get(userId);
+            //如果不存在此记录，表示用户没点过赞，添加记录并且文章点赞数+1
+            if (timePraise == null) {
+                Time time = timeDao.get(timeId);
+                int parisenum = time.getPraiseNum()+1;
+                timeDao.updateParise(timeId,parisenum);
+                TimePraise praise = new TimePraise();
+                praise.setTimeId(timeId);
+                praise.setUserId(userId);
+                Long now = System.currentTimeMillis();
+                praise.setCreateTime(now);
+                timePraiseDao.mark(praise);
+                System.out.println("+1");
+            } else {
+                //如果存在此纪录,表示用户点过赞，这次是取消点赞，删除记录并且文章点赞数-1
+                timePraiseDao.unmark(timePraise.getUserId());
+                Time time = timeDao.get(timeId);
+                int parisenum = time.getPraiseNum()-1;
+                timeDao.updateParise(timeId,parisenum);
+                System.out.println("-1");
+            }
     }
 }

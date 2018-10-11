@@ -46,4 +46,13 @@ public interface TimeService {
      * @return 自己时光VO
      */
     List<TimeMeVO> getMe(Integer userId);
+
+    /**
+     * 点赞/取消点赞
+     * @param timeId
+     * @param userId
+     */
+    void praise(Integer timeId,Integer userId);
+
+
 }
