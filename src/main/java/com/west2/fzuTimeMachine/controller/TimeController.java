@@ -80,4 +80,13 @@ public class TimeController {
         return apiResult;
     }
 
+    @ApiOperation(value = "时光点赞", notes = "请求一次执行一次,如果已经点赞,则取消点赞;反之")
+    @ApiImplicitParam(name = "timeId", value = "时光id")
+    @GetMapping("/praise")
+    public ApiResult<String> praise(@RequestParam("timeId") @NotNull Integer timeId,HttpSession session){
+        ApiResult<String> apiResult = new ApiResult<>();
+        timeService.praise(timeId,(Integer) session.getAttribute("userId"));
+        apiResult.setText("praise time success");
+        return apiResult;
+    }
 }
