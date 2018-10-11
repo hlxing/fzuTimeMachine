@@ -20,15 +20,15 @@
 
 ### 环境准备
 
-JDK1.8+Intellij IDEA+Mysql+Redis+Natapp(可选)
+JDK1.8 + Intellij IDEA + Mysql+Redis + Natapp(可选)
 
-#### 1.安装lombok插件(魔法糖工具),减少冗余代码,并进行相关配置
+#### 1.安装 lombok 插件(魔法糖工具),减少冗余代码,并进行相关配置
 
-#### 2.创建数据库timeMachine,导入[sql文件](https://github.com/hlxing/fzuTimeMachine/blob/master/timemachine.sql),增加用户timeMachine,密码123456,并分配其相应权限
+#### 2.创建数据库 timeMachine,导入[sql文件](https://github.com/hlxing/fzuTimeMachine/blob/master/timemachine.sql),增加用户 timeMachine,密码 123456,并分配其相应权限
 
-#### 3.安装并启动redis
+#### 3.安装并启动 redis
 
-#### 4.安装并启动natapp(可选,小程序授权回调及七牛云oos上传回调专用),并修改application.yml
+#### 4.安装并启动 natapp(可选,小程序授权回调及七牛云oos上传回调专用),并修改 application.yml
 
 #### 5.启动项目,打开[swagger2接口页面](http://localhost/swagger-ui.html#/)
 
