@@ -10,9 +10,9 @@ import org.apache.ibatis.annotations.Param;
  **/
 public interface TimePraiseDao {
 
-    void mark(TimePraise timePraise);
+    void save(TimePraise timePraise);
 
     TimePraise get(@Param("userId") Integer userId);
 
-    void unmark(@Param("userId") Integer userId);
+    void delete(@Param("userId") Integer userId);
 }
