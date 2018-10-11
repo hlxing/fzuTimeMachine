@@ -19,6 +19,8 @@ public interface TimeDao {
 
     void update(Time time);
 
+    void updateParise(@Param("id") Integer id, @Param("pariseNum") Integer pariseNum);
+
     void delete(Integer timeId);
 
     List<Time> getByUserId(Integer userId);
