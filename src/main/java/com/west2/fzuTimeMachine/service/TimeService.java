@@ -49,8 +49,8 @@ public interface TimeService {
 
     /**
      * 点赞/取消点赞
-     * @param timeId
-     * @param userId
+     * @param timeId 时光id
+     * @param userId 用户id
      */
     void praise(Integer timeId,Integer userId);
 

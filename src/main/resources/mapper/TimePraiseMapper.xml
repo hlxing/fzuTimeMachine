@@ -5,18 +5,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.west2.fzuTimeMachine.dao.TimePraiseDao">
 
 	<insert id="save" parameterType="TimePraise" keyProperty="id" useGeneratedKeys="true">
-		INSERT INTO time_praise(userId,timeId,createTime) VALUES (#{userId}, #{timeId}, #{createTime})
+		INSERT INTO
+			time_praise(userId,timeId,createTime)
+		VALUES
+			(#{userId}, #{timeId}, #{createTime})
 	</insert>
 
-	<select id="get" resultType="TimePraise">
+	<select id="getByUserId" resultType="TimePraise">
 		SELECT
-			   id,userId,timeId,createTime
-		FROM time_praise
-		WHERE userId = #{userId}
+			id,userId,timeId,createTime
+		FROM
+			time_praise
+		WHERE
+			userId = #{userId}
 	</select>
-	<delete id="delete">
+
+	<delete id="deleteByUserId">
 		DELETE
-		FROM time_praise
-		WHERE userId = #{userId}
+		FROM
+			time_praise
+		WHERE
+			userId = #{userId}
 	</delete>
+
 </mapper>  
