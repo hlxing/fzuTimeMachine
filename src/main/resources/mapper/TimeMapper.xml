@@ -46,13 +46,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE
 			id = #{id}
 	</update>
-	<update id="updateParise">
+	<update id="updatePraise">
 		UPDATE
-		time
+			time
 		SET
-		praiseNum = #{pariseNum}
+			praiseNum = #{pariseNum}
 		WHERE
-		id = #{id}
+			id = #{id}
 	</update>
 	<delete id="delete">
 		DELETE

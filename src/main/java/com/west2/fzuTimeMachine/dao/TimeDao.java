@@ -19,7 +19,7 @@ public interface TimeDao {
 
     void update(Time time);
 
-    void updateParise(@Param("id") Integer id, @Param("pariseNum") Integer pariseNum);
+    void updatePraise(@Param("id") Integer id, @Param("praiseNum") Integer praiseNum);
 
     void delete(Integer timeId);
 
