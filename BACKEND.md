@@ -77,26 +77,26 @@ PS：@description写上关于该类的描述，不超过一行
 
 ### 前言
 
-为加快开发效率，引入**swagger**，快速生成Api文档，唯一缺点是代码侵入性
+为加快开发效率，引入 **swagger** ，快速生成 Api 文档，唯一缺点是代码侵入性
 
 ### Swagger
 
-所有控制层的接口和DTO模型(前端传输过来的对象)均加上swagger相关注解，具体看项目已有代码  
+所有控制层的接口和 DTO 模型(前端传输过来的对象)均加上 swagger 相关注解，具体看项目已有代码  
 控制层: @ApiOperation (必选) + @ApiImplicitParam (可选,当参数不为DTO时必须加上)  
 DTO: @ApiModel (必选) + @ApiModelProperty (必选)
 
 
 ## 5.控制层响应
 
-所有的接口均要有返回，统一返回ApiResult&lt;?&gt;，接口返回分为两种情况  
-第一种为无数据返回，即前端不需要任何响应数据，则返回一个ApiResult&lt;String&gt;，并通过setText()，填充提示信息  
-第二种情况为有数据返回，根据数据对象，创建一个ApiResult&lt;Data&gt;，并通过setData()填充需要的数据
+所有的接口均要有返回，统一返回 ApiResult&lt;?&gt;，接口返回分为两种情况  
+第一种为无数据返回，即前端不需要任何响应数据，则返回一个 ApiResult&lt;String&gt;，并通过 setText()，填充提示信息  
+第二种情况为有数据返回，根据数据对象，创建一个 ApiResult&lt;Data&gt;，并通过 setData()填充需要的数据
 
 ## 6.命名规范
 
 ### DAO
 
-以save，delete，updata和get开头，并根据所需要的参数进行补充，例如：通过openId获取用户，则命名为`getByOpenId`，如果参数多个则参数之间通过`And`连接  
+以 save，delete，update 和 get 开头，并根据所需要的参数进行补充，例如：通过 openId 获取用户，则命名为`getByOpenId`，如果参数多个则参数之间通过`And`连接  
 例外: 当条件参数为主键，例如 `id`，则直接命名为 `get`
 
 ### PO
