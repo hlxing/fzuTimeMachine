@@ -1,11 +1,14 @@
 package com.west2.fzuTimeMachine.service;
 
+import com.west2.fzuTimeMachine.model.dto.TimeCheckDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
 import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
+import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -37,8 +40,9 @@ public interface TimeService {
     /**
      * 时光删除
      * @param timeId 时光id
+     * @param userId 用户id
      */
-    void delete(Integer timeId);
+    void delete(Integer timeId, Integer userId);
 
     /**
      * 获取自己发布的时光
@@ -54,5 +58,15 @@ public interface TimeService {
      */
     void praise(Integer timeId,Integer userId);
 
+    /**
+     * 时光审核
+     * @param timeCheckDTO 时光审核DTO
+     */
+    void check(TimeCheckDTO timeCheckDTO);
 
+    /**
+     * 获取所有未审核的时光
+     * @return 时光未审核VO链表
+     */
+    List<TimeUnCheckVO> getUnCheck();
 }

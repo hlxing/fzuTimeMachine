@@ -12,11 +12,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				, #{label}, #{praiseNum}, #{checkStatus})
 	</insert>
 
-	<update id="updateStatus">
+	<update id="updateStatusAndVisible">
 		UPDATE
 			time
 		SET
-			checkStatus = #{status}
+			checkStatus = #{checkStatus},
+			visible = #{visible}
 		WHERE
 			id = #{id}
 	</update>
@@ -46,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE
 			id = #{id}
 	</update>
+
 	<update id="updatePraise">
 		UPDATE
 			time
@@ -54,13 +56,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE
 			id = #{id}
 	</update>
-	<delete id="delete">
-		DELETE
-		FROM
+
+	<update id="updateVisible">
+		UPDATE
 			time
+		SET
+			visible = #{visible}
 		WHERE
-			id = #{id}
-	</delete>
+			id = #{timeId}
+	</update>
 
 	<select id="getByUserId" resultType="Time">
 		SELECT
@@ -70,4 +74,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	  	WHERE
 			userId = #{userId}
 	</select>
+
+	<select id="getByUncheck" resultType="Time">
+		SELECT
+			id, userId, title, imgUrl, content, label
+		FROM
+			time
+		WHERE
+			checkStatus = 0
+	</select>
+
 </mapper>  

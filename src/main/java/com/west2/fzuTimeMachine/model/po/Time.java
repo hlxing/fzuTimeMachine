@@ -36,12 +36,12 @@ public class Time implements Serializable{
 
     /**
      * 审核状态列表:
-     * -2代表审核失败
-     * -1代表图片未上传
-     * 0代表正在审核
+     * 0代表未审核
      * 1代表审核成功
      */
-    private Integer checkStatus;
+    private Byte checkStatus;
+
+    private Byte visible;
 
     public Time() {
     }
