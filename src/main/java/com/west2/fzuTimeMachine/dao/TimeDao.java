@@ -13,7 +13,7 @@ public interface TimeDao {
 
     void save(Time time);
 
-    void updateStatus(@Param("id") Integer id, @Param("status") Integer status);
+    void updateStatusAndVisible(Time time);
 
     Time get(@Param("id") Integer id);
 
@@ -21,7 +21,9 @@ public interface TimeDao {
 
     void updatePraise(@Param("id") Integer id, @Param("praiseNum") Integer praiseNum);
 
-    void delete(Integer timeId);
+    void updateVisible(@Param("timeId") Integer timeId, @Param("visible") Byte visible);
 
     List<Time> getByUserId(Integer userId);
+
+    List<Time> getByUncheck();
 }
