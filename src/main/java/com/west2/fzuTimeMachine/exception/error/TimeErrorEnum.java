@@ -10,7 +10,10 @@ public enum TimeErrorEnum implements ApiError{
     BACK_INVALID(130,"BACK_INVALID"),
 
     // 找不到时光
-    NOT_FOUND(131,"NOT_FOUND");
+    NOT_FOUND(131,"NOT_FOUND"),
+
+    // 非自己时光
+    NOT_ME(132, "NOT_ME");
 
     private Integer code;
 
