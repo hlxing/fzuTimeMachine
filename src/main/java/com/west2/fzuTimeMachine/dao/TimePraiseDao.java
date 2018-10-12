@@ -12,7 +12,7 @@ public interface TimePraiseDao {
 
     void save(TimePraise timePraise);
 
-    TimePraise get(@Param("userId") Integer userId);
+    TimePraise getByUserId(@Param("userId") Integer userId);
 
-    void delete(@Param("userId") Integer userId);
+    void deleteByUserId(@Param("userId") Integer userId);
 }

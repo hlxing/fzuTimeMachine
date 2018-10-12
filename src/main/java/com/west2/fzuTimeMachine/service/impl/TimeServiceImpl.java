@@ -135,27 +135,26 @@ public class TimeServiceImpl implements TimeService {
     }
     @Override
     public void praise(Integer timeId,Integer userId){
-
-            TimePraise timePraise = timePraiseDao.get(userId);
+            TimePraise timePraise = timePraiseDao.getByUserId(userId);
             //如果不存在此记录，表示用户没点过赞，添加记录并且文章点赞数+1
             if (timePraise == null) {
                 Time time = timeDao.get(timeId);
-                int parisenum = time.getPraiseNum()+1;
-                timeDao.updateParise(timeId,parisenum);
+                int praiseNum = time.getPraiseNum()+1;
+                timeDao.updatePraise(timeId,praiseNum);
                 TimePraise praise = new TimePraise();
                 praise.setTimeId(timeId);
                 praise.setUserId(userId);
                 Long now = System.currentTimeMillis();
                 praise.setCreateTime(now);
-                timePraiseDao.mark(praise);
-                System.out.println("+1");
+                timePraiseDao.save(praise);
+                log.info("+1");
             } else {
                 //如果存在此纪录,表示用户点过赞，这次是取消点赞，删除记录并且文章点赞数-1
-                timePraiseDao.unmark(timePraise.getUserId());
+                timePraiseDao.deleteByUserId(timePraise.getUserId());
                 Time time = timeDao.get(timeId);
-                int parisenum = time.getPraiseNum()-1;
-                timeDao.updateParise(timeId,parisenum);
-                System.out.println("-1");
+                int praiseNum = time.getPraiseNum()-1;
+                timeDao.updatePraise(timeId,praiseNum);
+                log.info("-1");
             }
     }
 }
