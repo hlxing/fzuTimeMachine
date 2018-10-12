@@ -1,10 +1,12 @@
 package com.west2.fzuTimeMachine.controller;
 
+import com.west2.fzuTimeMachine.model.dto.TimeCheckDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
 import com.west2.fzuTimeMachine.model.po.ApiResult;
 import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
+import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
 import com.west2.fzuTimeMachine.service.TimeService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -61,15 +63,16 @@ public class TimeController {
         return apiResult;
     }
 
-    @ApiOperation(value = "时光删除", notes = "需要管理员权限")
+    @ApiOperation(value = "时光删除", notes = "删除自己的时光")
     @ApiImplicitParam(name = "timeId", value = "时光id")
     @GetMapping("/delete")
-    public ApiResult<String> delete(@RequestParam("timeId") @NotNull Integer timeId){
+    public ApiResult<String> delete(@RequestParam("timeId") @NotNull Integer timeId, HttpSession session){
         ApiResult<String> apiResult = new ApiResult<>();
-        timeService.delete(timeId);
-        apiResult.setText("delete success");
+        timeService.delete(timeId, (Integer) session.getAttribute("userId"));
+        apiResult.setText("delete my time success");
         return apiResult;
     }
+
 
     @ApiOperation(value = "我的时光", notes = "获取历史发布的时光")
     @GetMapping("/me")
@@ -87,6 +90,24 @@ public class TimeController {
         ApiResult<String> apiResult = new ApiResult<>();
         timeService.praise(timeId,(Integer) session.getAttribute("userId"));
         apiResult.setText("praise time success");
+        return apiResult;
+    }
+
+    @ApiOperation(value = "时光审核", notes = "需要管理员权限")
+    @PostMapping("/check")
+    public ApiResult<String> check(@RequestBody @Valid TimeCheckDTO timeCheckDTO) {
+        ApiResult<String> apiResult = new ApiResult<>();
+        timeService.check(timeCheckDTO);
+        apiResult.setText("check success");
+        return apiResult;
+    }
+
+    @ApiOperation(value = "获取未审核的时光", notes = "需要管理员权限")
+    @GetMapping("/unCheck")
+    public ApiResult<List<TimeUnCheckVO>> getUnCheck() {
+        ApiResult<List<TimeUnCheckVO>> apiResult = new ApiResult<>();
+        List<TimeUnCheckVO> timeUnCheckVOList = timeService.getUnCheck();
+        apiResult.setData(timeUnCheckVOList);
         return apiResult;
     }
 }

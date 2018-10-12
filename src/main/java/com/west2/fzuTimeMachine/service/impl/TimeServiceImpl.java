@@ -7,12 +7,14 @@ import com.west2.fzuTimeMachine.dao.TimeDao;
 import com.west2.fzuTimeMachine.dao.TimePraiseDao;
 import com.west2.fzuTimeMachine.exception.error.ApiException;
 import com.west2.fzuTimeMachine.exception.error.TimeErrorEnum;
+import com.west2.fzuTimeMachine.model.dto.TimeCheckDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.po.Time;
 import com.west2.fzuTimeMachine.model.po.TimePraise;
 import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
+import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
 import com.west2.fzuTimeMachine.service.TimeService;
 import com.west2.fzuTimeMachine.util.AESUtil;
@@ -60,8 +62,9 @@ public class TimeServiceImpl implements TimeService {
 
         // 保存Time->>
         Time time = modelMapper.map(timeUploadDTO, Time.class);
-        // -1为图片尚未上传,上传成功后设置为0
-        time.setCheckStatus(-1);
+        // 图片尚未上传成功,不可见,且未审核
+        time.setVisible((byte) 0);
+        time.setCheckStatus((byte) 0);
         // 图片地址为:七牛云域名+key
         time.setImgUrl(qiniuConfig.getCloudUrl() + key);
         time.setUserId(userId);
@@ -97,8 +100,8 @@ public class TimeServiceImpl implements TimeService {
         // 校验回调消息是否正确
         String rightKey = AESUtil.decrypt(timeUploadBackDTO.getEncryptedId(), qiniuConfig.getBackSecretKey());
         if (rightKey != null && timeUploadBackDTO.getId().equals(rightKey)) {
-            // 更新时光状态为待审核0
-            timeDao.updateStatus(Integer.valueOf(timeUploadBackDTO.getId()),0);
+            // 时光变为可见状态
+            timeDao.updateVisible(Integer.valueOf(timeUploadBackDTO.getId()), (byte) 1);
         }else{
             throw new ApiException(TimeErrorEnum.BACK_INVALID);
         }
@@ -114,12 +117,14 @@ public class TimeServiceImpl implements TimeService {
     }
 
     @Override
-    public void delete(Integer timeId) {
+    public void delete(Integer timeId,Integer userId) {
         Time time = timeDao.get(timeId);
-        if (time != null) {
-            timeDao.delete(timeId);
-        }else{
+        if(time == null){
             throw new ApiException(TimeErrorEnum.NOT_FOUND);
+        }else if(!time.getUserId().equals(userId)){
+            throw new ApiException(TimeErrorEnum.NOT_ME);
+        }else{
+            timeDao.updateVisible(timeId, (byte) 0);
         }
     }
 
@@ -127,10 +132,7 @@ public class TimeServiceImpl implements TimeService {
     public List<TimeMeVO> getMe(Integer userId) {
         List<Time> timeList = timeDao.getByUserId(userId);
         List<TimeMeVO> timeMeVOList = new ArrayList<>();
-        for (Time time : timeList) {
-            TimeMeVO timeMeVO = modelMapper.map(time, TimeMeVO.class);
-            timeMeVOList.add(timeMeVO);
-        }
+        timeList.forEach((time) -> timeMeVOList.add(modelMapper.map(time, TimeMeVO.class)));
         return timeMeVOList;
     }
     @Override
@@ -156,5 +158,30 @@ public class TimeServiceImpl implements TimeService {
                 timeDao.updatePraise(timeId,praiseNum);
                 log.info("-1");
             }
+    }
+
+    @Override
+    public void check(TimeCheckDTO timeCheckDTO) {
+        Integer timeId = timeCheckDTO.getTimeId();
+        Time time = timeDao.get(timeId);
+        if (time == null) {
+            throw new ApiException(TimeErrorEnum.NOT_FOUND);
+        }else{
+            time.setCheckStatus((byte) 1);
+            if(timeCheckDTO.getStatus().equals(0)){
+                time.setVisible((byte) 1);
+            }else{
+                time.setVisible((byte) 0);
+            }
+            timeDao.updateStatusAndVisible(time);
+        }
+    }
+
+    @Override
+    public List<TimeUnCheckVO> getUnCheck() {
+        List<Time> timeList = timeDao.getByUncheck();
+        List<TimeUnCheckVO> timeUnCheckVOList = new ArrayList<>();
+        timeList.forEach((time) -> timeUnCheckVOList.add(modelMapper.map(time, TimeUnCheckVO.class)));
+        return timeUnCheckVOList;
     }
 }
