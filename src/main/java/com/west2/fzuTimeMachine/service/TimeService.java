@@ -4,6 +4,7 @@ import com.west2.fzuTimeMachine.model.dto.TimeCheckDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
+import com.west2.fzuTimeMachine.model.vo.TimeCollectionVO;
 import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
@@ -69,4 +70,21 @@ public interface TimeService {
      * @return 时光未审核VO链表
      */
     List<TimeUnCheckVO> getUnCheck();
+
+    /**
+     * 收藏时光
+     */
+    void Collect(Integer timeId, Integer userId);
+
+    /**
+     * 取消收藏
+     */
+    void unCollect(Integer id, Integer userId);
+
+    /**
+     *
+     * @return
+     */
+    List<TimeCollectionVO> getCollection(Integer userId);
+
 }
