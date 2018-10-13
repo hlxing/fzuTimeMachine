@@ -219,7 +219,6 @@ public class TimeServiceImpl implements TimeService {
         List<TimeCollection> timeCollectionList = timeCollectionDao.getByUserId(userId);
         List<TimeCollectionVO> timeCollectionVOS = new ArrayList<>();
         for(TimeCollection timeCollection:timeCollectionList){
-            System.out.println(timeCollection.toString());
             TimeCollectionVO timeCollectionVO = modelMapper.map(timeCollection,TimeCollectionVO.class);
             Time time = timeDao.get(timeCollection.getTimeId());
             timeCollectionVO.setImgUrl(time.getImgUrl());
