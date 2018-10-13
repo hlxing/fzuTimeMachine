@@ -3,6 +3,7 @@ package com.west2.fzuTimeMachine.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.west2.fzuTimeMachine.config.QiniuConfig;
+import com.west2.fzuTimeMachine.dao.TimeCollectionDao;
 import com.west2.fzuTimeMachine.dao.TimeDao;
 import com.west2.fzuTimeMachine.dao.TimePraiseDao;
 import com.west2.fzuTimeMachine.exception.error.ApiException;
@@ -12,7 +13,9 @@ import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.po.Time;
+import com.west2.fzuTimeMachine.model.po.TimeCollection;
 import com.west2.fzuTimeMachine.model.po.TimePraise;
+import com.west2.fzuTimeMachine.model.vo.TimeCollectionVO;
 import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
@@ -20,6 +23,7 @@ import com.west2.fzuTimeMachine.service.TimeService;
 import com.west2.fzuTimeMachine.util.AESUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,14 +49,17 @@ public class TimeServiceImpl implements TimeService {
 
     private TimePraiseDao timePraiseDao;
 
+    private TimeCollectionDao timeCollectionDao;
+
     @Autowired
     public TimeServiceImpl(QiniuConfig qiniuConfig, ObjectMapper jsonMapper,
-                           ModelMapper modelMapper, TimeDao timeDao,TimePraiseDao timePraiseDao) {
+                           ModelMapper modelMapper, TimeDao timeDao, TimePraiseDao timePraiseDao, TimeCollectionDao timeCollectionDao) {
         this.qiniuConfig = qiniuConfig;
         this.jsonMapper = jsonMapper;
         this.modelMapper = modelMapper;
         this.timeDao = timeDao;
         this.timePraiseDao = timePraiseDao;
+        this.timeCollectionDao = timeCollectionDao;
     }
 
     @Override
@@ -184,4 +191,45 @@ public class TimeServiceImpl implements TimeService {
         timeList.forEach((time) -> timeUnCheckVOList.add(modelMapper.map(time, TimeUnCheckVO.class)));
         return timeUnCheckVOList;
     }
+
+    @Override
+    public void Collect(Integer timeId,Integer userId){
+        TimeCollection timeCollection = timeCollectionDao.getByTimeIdAndUserId(timeId,userId);
+        if(timeCollection == null){
+            TimeCollection collection = new TimeCollection();
+            collection.setTimeId(timeId);
+            collection.setUserId(userId);
+            Long now = System.currentTimeMillis();
+            collection.setCreateTime(now);
+            timeCollectionDao.save(collection);
+        }
+
+    }
+
+    @Override
+    public void unCollect(Integer id, Integer userId){
+        TimeCollection timeCollection = timeCollectionDao.getById(id);
+        if(timeCollection!=null){
+            timeCollectionDao.deleteById(id);
+        }
+    }
+
+    @Override
+    public List<TimeCollectionVO> getCollection(Integer userId) {
+        List<TimeCollection> timeCollectionList = timeCollectionDao.getByUserId(userId);
+        List<TimeCollectionVO> timeCollectionVOS = new ArrayList<>();
+        for(TimeCollection timeCollection:timeCollectionList){
+            System.out.println(timeCollection.toString());
+            TimeCollectionVO timeCollectionVO = modelMapper.map(timeCollection,TimeCollectionVO.class);
+            Time time = timeDao.get(timeCollection.getTimeId());
+            timeCollectionVO.setImgUrl(time.getImgUrl());
+            timeCollectionVO.setContent(time.getContent());
+            timeCollectionVO.setTitle(time.getTitle());
+            timeCollectionVOS.add(timeCollectionVO);
+        }
+        return timeCollectionVOS;
+    }
+
+
+
 }
