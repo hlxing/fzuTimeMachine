@@ -5,12 +5,10 @@ import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
 import com.west2.fzuTimeMachine.model.po.ApiResult;
-import com.west2.fzuTimeMachine.model.vo.TimeCollectionVO;
 import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
 import com.west2.fzuTimeMachine.service.TimeService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -110,33 +108,6 @@ public class TimeController {
         ApiResult<List<TimeUnCheckVO>> apiResult = new ApiResult<>();
         List<TimeUnCheckVO> timeUnCheckVOList = timeService.getUnCheck();
         apiResult.setData(timeUnCheckVOList);
-        return apiResult;
-    }
-
-    @ApiOperation(value = "收藏时光", notes = "收藏喜欢的时光")
-    @GetMapping("/collect")
-    public ApiResult<String> collect(@RequestParam("timeId") @NotNull Integer timeId,HttpSession session){
-        ApiResult<String> apiResult = new ApiResult<>();
-        timeService.Collect(timeId,(Integer) session.getAttribute("userId"));
-        apiResult.setText("collect time success");
-        return apiResult;
-    }
-
-    @ApiOperation(value = "取消收藏时光", notes = "删除已经收藏的时光")
-    @GetMapping("/unCollect")
-    public ApiResult<String> unCollect(@RequestParam("id") @NotNull Integer id,HttpSession session){
-        ApiResult<String> apiResult = new ApiResult<>();
-        timeService.unCollect(id,(Integer) session.getAttribute("userId"));
-        apiResult.setText("unCollect time success");
-        return apiResult;
-    }
-
-    @ApiOperation(value = "我的最爱", notes = "已经收藏的全部时光")
-    @GetMapping("/getCollect")
-    public ApiResult<List<TimeCollectionVO>> getCollect(HttpSession session){
-        ApiResult<List<TimeCollectionVO>> apiResult = new ApiResult<>();
-        List<TimeCollectionVO> timeCollectionVOS = timeService.getCollection((Integer) session.getAttribute("userId"));
-        apiResult.setData(timeCollectionVOS);
         return apiResult;
     }
 }
