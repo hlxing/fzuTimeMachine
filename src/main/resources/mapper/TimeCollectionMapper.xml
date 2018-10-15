@@ -19,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE
 			userId = #{userId}
 	</select>
+
 	<select id="getByTimeIdAndUserId" resultType="TimeCollection">
 		SELECT
 			id,userId,timeId,createTime
@@ -27,20 +28,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE
 			timeid = #{timeId} and userId = #{userId}
 	</select>
-	<delete id="deleteById">
+
+	<delete id="delete">
 		DELETE
 		FROM
 			time_collection
 		WHERE
 			id = #{id}
 	</delete>
-	<select id="getById" resultType="TimeCollection">
+
+	<select id="get" resultType="TimeCollection">
 		SELECT
 			id,userId,timeId,createTime
 		FROM
 			time_collection
 		WHERE
 			id = #{id}
-
 	</select>
+
 </mapper>  

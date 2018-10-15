@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.west2</groupId>
-	<artifactId>fzuTimeMachine</artifactId>
+	<artifactId>timemachine</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -22,6 +22,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<!-- 跳过测试样例 -->
+		<skipTests>true</skipTests>
 	</properties>
 
 	<dependencies>
@@ -107,6 +109,13 @@
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.10</version>
+		</dependency>
+
+		<!-- commons -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
 		</dependency>
 
 		<!-- swagger2 -->

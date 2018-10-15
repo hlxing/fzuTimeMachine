@@ -28,19 +28,9 @@ spring:
   datasource:
     # mysql
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/timeMachine?characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/timemachine?characterEncoding=utf-8
     username: timeMachine
     password: 123456
-  # 模板配置
-  thymeleaf:
-    # 避免模板更改导致重启
-    cache: false
-    # 标签bug
-    mode: HTML
-    # 前缀
-    prefix: classpath:/static
-    # 后缀
-    suffix: .html
 
 # mybatis
 mybatis:
@@ -72,5 +62,9 @@ qiniu:
   tokenExpires: 180
   backSecretKey: 2a640bf3701da3e7
   # 服务器地址,请根据部署的服务器进行变更,推荐使用内网穿透进行测试
-  backUrl: http://ma8g5r.natappfree.cc/time/uploadBack
+  backUrl: http://time.huanglexing.com/time/uploadBack
   cloudUrl: cloud.huanglexing.com/
+
+# swagger 配置接口访问域名
+swagger:
+  host:

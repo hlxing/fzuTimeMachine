@@ -82,8 +82,8 @@ public interface TimeService {
     void unCollect(Integer id, Integer userId);
 
     /**
-     *
-     * @return
+     * 获取时光收藏
+     * @return 时光收藏VO链表
      */
     List<TimeCollectionVO> getCollection(Integer userId);
 
