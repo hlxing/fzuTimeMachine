@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 public class TimeCheckDTO implements Serializable {
 
-    @Size(min = 1)
+    @NotNull
     @ApiModelProperty(required = true,notes = "时光id",example = "13")
     private Integer timeId;
 

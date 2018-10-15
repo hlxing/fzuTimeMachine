@@ -3,6 +3,7 @@ package com.west2.fzuTimeMachine.service.impl;
 import com.west2.fzuTimeMachine.dao.UserDao;
 import com.west2.fzuTimeMachine.exception.error.ApiException;
 import com.west2.fzuTimeMachine.exception.error.UserErrorEnum;
+import com.west2.fzuTimeMachine.model.dto.UserAdminLoginDTO;
 import com.west2.fzuTimeMachine.model.dto.UserOAuthDTO;
 import com.west2.fzuTimeMachine.model.po.Jscode2session;
 import com.west2.fzuTimeMachine.model.po.WechatUser;
@@ -43,17 +44,17 @@ public class UserServiceImpl implements UserService {
         }
         log.info("session->>" + jscode2session);
         HttpSession httpSession = request.getSession(true);
-        httpSession.setAttribute("sessionKey",jscode2session.getSessionKey());
+        httpSession.setAttribute("sessionKey", jscode2session.getSessionKey());
 
         WechatUser wechatUser = WechatUtil.decryptUser(jscode2session.getSessionKey(), userOAuthDTO.getEncryptedData(), userOAuthDTO.getIvStr());
-        wechatUser.setCreateTime(System.currentTimeMillis()/1000);
+        wechatUser.setCreateTime(System.currentTimeMillis() / 1000);
         userDao.save(wechatUser);
-        httpSession.setAttribute("userId",wechatUser.getUserId());
+        httpSession.setAttribute("userId", wechatUser.getUserId());
         log.info("wechatUser->>" + wechatUser);
     }
 
     @Override
-    public void login(String code,HttpServletRequest request) {
+    public void login(String code, HttpServletRequest request) {
         log.info("code->>" + code);
         Jscode2session jscode2session = WechatUtil.getJscode2session(code);
         if (null == jscode2session) {
@@ -65,10 +66,18 @@ public class UserServiceImpl implements UserService {
         }
         log.info("session->>" + jscode2session);
         HttpSession httpSession = request.getSession(true);
-        httpSession.setAttribute("userId",wechatUser.getUserId());
-        httpSession.setAttribute("sessionKey",jscode2session.getSessionKey());
+        httpSession.setAttribute("userId", wechatUser.getUserId());
+        httpSession.setAttribute("sessionKey", jscode2session.getSessionKey());
     }
 
+    @Override
+    public void adminLogin(UserAdminLoginDTO userAdminLoginDTO, HttpServletRequest request) {
+        if (userAdminLoginDTO.getName().equals("w2") && userAdminLoginDTO.getPass().equals("10086")) {
+            request.getSession(true);
+        } else {
+            throw new ApiException(UserErrorEnum.PASS_INVALID);
+        }
+    }
 
 
 }

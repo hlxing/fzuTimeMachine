@@ -1,5 +1,6 @@
 package com.west2.fzuTimeMachine.controller;
 
+import com.west2.fzuTimeMachine.model.dto.UserAdminLoginDTO;
 import com.west2.fzuTimeMachine.model.dto.UserOAuthDTO;
 import com.west2.fzuTimeMachine.model.po.ApiResult;
 import com.west2.fzuTimeMachine.service.UserService;
@@ -54,8 +55,18 @@ public class UserController {
     @GetMapping("/xLogin")
     public ApiResult<String> xLogin(HttpSession session) {
         session.setAttribute("userId", 1);
+        session.setAttribute("unionid",1);
         ApiResult<String> apiResult = new ApiResult<>();
         apiResult.setText("login success");
+        return apiResult;
+    }
+
+    @ApiOperation(value = "管理员登录")
+    @PostMapping("/adminLogin")
+    public ApiResult<String> adminLogin(@RequestBody @Valid UserAdminLoginDTO userAdminLoginDTO, HttpServletRequest request) {
+        ApiResult<String> apiResult = new ApiResult<>();
+        userService.adminLogin(userAdminLoginDTO,request);
+        apiResult.setText("admin login success");
         return apiResult;
     }
 

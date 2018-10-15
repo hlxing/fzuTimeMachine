@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.west2.fzuTimeMachine.dao.TimeCollectionDao">
+
+	<insert id="save" parameterType="TimeCollection" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO
+			time_collection(userId,timeId,createTime)
+		VALUES
+			(#{userId}, #{timeId}, #{createTime})
+	</insert>
+
+	<select id="getByUserId" resultType="TimeCollection">
+		SELECT
+			id,userId,timeId,createTime
+		FROM
+			time_collection
+		WHERE
+			userId = #{userId}
+	</select>
+
+	<select id="getByTimeIdAndUserId" resultType="TimeCollection">
+		SELECT
+			id,userId,timeId,createTime
+		FROM
+			time_collection
+		WHERE
+			timeid = #{timeId} and userId = #{userId}
+	</select>
+
+	<delete id="delete">
+		DELETE
+		FROM
+			time_collection
+		WHERE
+			id = #{id}
+	</delete>
+
+	<select id="get" resultType="TimeCollection">
+		SELECT
+			id,userId,timeId,createTime
+		FROM
+			time_collection
+		WHERE
+			id = #{id}
+	</select>
+
+</mapper>  
