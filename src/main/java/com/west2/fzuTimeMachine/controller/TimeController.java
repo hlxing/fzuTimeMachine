@@ -10,7 +10,6 @@ import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
 import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
 import com.west2.fzuTimeMachine.service.TimeService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -131,9 +130,9 @@ public class TimeController {
         return apiResult;
     }
 
-    @ApiOperation(value = "我的最爱", notes = "已经收藏的全部时光")
-    @GetMapping("/getCollect")
-    public ApiResult<List<TimeCollectionVO>> getCollect(HttpSession session){
+    @ApiOperation(value = "我的收藏", notes = "已经收藏的全部时光")
+    @GetMapping("/collection")
+    public ApiResult<List<TimeCollectionVO>> getCollection(HttpSession session){
         ApiResult<List<TimeCollectionVO>> apiResult = new ApiResult<>();
         List<TimeCollectionVO> timeCollectionVOS = timeService.getCollection((Integer) session.getAttribute("userId"));
         apiResult.setData(timeCollectionVOS);

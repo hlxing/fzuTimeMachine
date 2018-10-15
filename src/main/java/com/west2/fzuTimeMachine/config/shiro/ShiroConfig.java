@@ -46,16 +46,22 @@ public class ShiroConfig {
         // 添加自定义的拦截器authFilter,用于自定义登录处理逻辑
         Map<String, Filter> filterMap = new HashMap<>();
         filterMap.put("authFilter", new AuthFilter());
+        filterMap.put("crosFilter", new CROSFilter());
         factoryBean.setFilters(filterMap);
         factoryBean.setSecurityManager(securityManager);
         Map<String, String> filterRuleMap = new HashMap<>();
 
         // 调试专用
-        filterRuleMap.put("/**", "anon");
+ //       filterRuleMap.put("/**", "anon");
+
+        // cros
+        filterRuleMap.put("/**", "crosFilter");
 
 //        // 匿名访问接口
         filterRuleMap.put("/miniapp/oauth", "anon");
         filterRuleMap.put("/test/connect", "anon");
+        filterRuleMap.put("/user/xLogin", "anon");
+        filterRuleMap.put("/time/uploadBack", "anon");
 
         // swagger-ui匿名访问
         filterRuleMap.put("/swagger-resources/**", "anon");
@@ -64,7 +70,7 @@ public class ShiroConfig {
         filterRuleMap.put("/webjars/**", "anon");
 
 //        // 需要登录的接口
-//        filterRuleMap.put("/**", "authc,authFilter");
+        filterRuleMap.put("/**", "authc,authFilter");
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);
         return factoryBean;
     }

@@ -1,5 +1,6 @@
 package com.west2.fzuTimeMachine.service;
 
+import com.west2.fzuTimeMachine.model.dto.UserAdminLoginDTO;
 import com.west2.fzuTimeMachine.model.dto.UserOAuthDTO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,4 +26,10 @@ public interface UserService {
      */
     void login(String code, HttpServletRequest request);
 
+    /**
+     * 管理员登录
+     * @param userAdminLoginDTO 管理员登录传输对象
+     * @param request 请求
+     */
+    void adminLogin(UserAdminLoginDTO userAdminLoginDTO, HttpServletRequest request);
 }

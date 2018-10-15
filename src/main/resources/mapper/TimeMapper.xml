@@ -6,10 +6,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="save" parameterType="Time" keyProperty="id" useGeneratedKeys="true">
 		INSERT INTO
-			time(userId, title, imgUrl, content, longitude, latitude, createTime, updateTime, label, praiseNum, checkStatus)
+			time(userId, title, imgUrl, content, longitude, latitude, createTime, updateTime, label,
+				 praiseNum, checkStatus, visible)
 		VALUES
 			(#{userId}, #{title}, #{imgUrl}, #{content}, #{longitude}, #{latitude}, #{createTime}, #{updateTime}
-				, #{label}, #{praiseNum}, #{checkStatus})
+				, #{label}, #{praiseNum}, #{checkStatus}, #{visible})
 	</insert>
 
 	<update id="updateStatusAndVisible">
@@ -52,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		UPDATE
 			time
 		SET
-			praiseNum = #{pariseNum}
+			praiseNum = #{praiseNum}
 		WHERE
 			id = #{id}
 	</update>
