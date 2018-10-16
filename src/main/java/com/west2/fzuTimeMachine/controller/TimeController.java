@@ -5,10 +5,7 @@ import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
 import com.west2.fzuTimeMachine.model.po.ApiResult;
-import com.west2.fzuTimeMachine.model.vo.TimeCollectionVO;
-import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
-import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
-import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
+import com.west2.fzuTimeMachine.model.vo.*;
 import com.west2.fzuTimeMachine.service.TimeService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -136,6 +133,15 @@ public class TimeController {
         ApiResult<List<TimeCollectionVO>> apiResult = new ApiResult<>();
         List<TimeCollectionVO> timeCollectionVOS = timeService.getCollection((Integer) session.getAttribute("userId"));
         apiResult.setData(timeCollectionVOS);
+        return apiResult;
+    }
+
+    @ApiOperation(value = "探索时光", notes = "随机获取一个时光")
+    @GetMapping("/explore")
+    public ApiResult<TimeVO> explore(){
+        ApiResult<TimeVO> apiResult = new ApiResult<>();
+        TimeVO timeVO = timeService.getTime();
+        apiResult.setData(timeVO);
         return apiResult;
     }
 }
