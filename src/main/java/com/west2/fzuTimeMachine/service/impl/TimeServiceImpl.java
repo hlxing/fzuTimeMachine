@@ -15,10 +15,7 @@ import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.po.Time;
 import com.west2.fzuTimeMachine.model.po.TimeCollection;
 import com.west2.fzuTimeMachine.model.po.TimePraise;
-import com.west2.fzuTimeMachine.model.vo.TimeCollectionVO;
-import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
-import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
-import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
+import com.west2.fzuTimeMachine.model.vo.*;
 import com.west2.fzuTimeMachine.service.TimeService;
 import com.west2.fzuTimeMachine.util.AESUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -236,6 +234,19 @@ public class TimeServiceImpl implements TimeService {
         }
         return timeCollectionVOS;
     }
+
+    @Override
+    public TimeVO getTime() {
+        List<Integer> timeList = timeDao.getByVisible(1);
+
+        int len = timeList.size();
+        int index = (int)((System.currentTimeMillis() /1000) % len);
+        int timeId = timeList.get(index);
+        TimeVO timeVO = modelMapper.map(timeDao.get(timeId),TimeVO.class);
+
+        return timeVO;
+    }
+
 
 
 }
