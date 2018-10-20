@@ -31,7 +31,14 @@
 		WHERE
 			id = #{id}
 	</select>
-
+	<select id="getByVisible" resultType="Integer">
+		SELECT
+			   id
+		FROM
+			 time
+		WHERE
+				visible = #{visible}
+	</select>
 	<update id="update" parameterType="Time">
 		UPDATE
 			time
