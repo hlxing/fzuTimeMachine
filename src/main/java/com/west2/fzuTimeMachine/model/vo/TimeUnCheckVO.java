@@ -13,13 +13,9 @@ public class TimeUnCheckVO implements Serializable{
 
     private Integer id;
 
-    private String title;
-
     private String imgUrl;
 
     private String content;
-
-    private String label;
 
     public TimeUnCheckVO() {
     }

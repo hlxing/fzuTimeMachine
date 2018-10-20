@@ -4,12 +4,8 @@ import com.west2.fzuTimeMachine.model.dto.TimeCheckDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUpdateDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.dto.TimeUploadDTO;
-import com.west2.fzuTimeMachine.model.vo.TimeCollectionVO;
-import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
-import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
-import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
+import com.west2.fzuTimeMachine.model.vo.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 
@@ -87,4 +83,26 @@ public interface TimeService {
      */
     List<TimeCollectionVO> getCollection(Integer userId);
 
+    /**
+     * 获取时光排行VO
+     *
+     * @return 时光排行VO链表
+     */
+    List<TimeRankVO> getRank();
+
+    /**
+     * 随机获取时光
+     *
+     * @param userId 用户id
+     */
+    TimeVO explore(Integer userId);
+
+    /**
+     * 获取时光
+     *
+     * @param timeId 时光id
+     * @param userId 用户id
+     * @return 时光视图
+     */
+    TimeVO get(Integer timeId, Integer userId);
 }
