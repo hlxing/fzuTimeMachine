@@ -55,7 +55,6 @@ public class UserController {
     @GetMapping("/xLogin")
     public ApiResult<String> xLogin(HttpSession session) {
         session.setAttribute("userId", 1);
-        session.setAttribute("unionid",1);
         ApiResult<String> apiResult = new ApiResult<>();
         apiResult.setText("login success");
         return apiResult;

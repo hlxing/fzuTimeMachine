@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.west2.fzuTimeMachine.dao.TimeDao">
 
 	<insert id="save" parameterType="Time" keyProperty="id" useGeneratedKeys="true">
 		INSERT INTO
-			time(userId, title, imgUrl, content, longitude, latitude, createTime, updateTime, label,
+		time(userId, imgUrl, content, longitude, latitude, location, createTime, updateTime,
 				 praiseNum, checkStatus, visible)
 		VALUES
-			(#{userId}, #{title}, #{imgUrl}, #{content}, #{longitude}, #{latitude}, #{createTime}, #{updateTime}
-				, #{label}, #{praiseNum}, #{checkStatus}, #{visible})
+		(#{userId}, #{imgUrl}, #{content}, #{longitude}, #{latitude}, #{location} , #{createTime}, #{updateTime}
+		, #{praiseNum}, #{checkStatus}, #{visible})
 	</insert>
 
 	<update id="updateStatusAndVisible">
@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="get" resultType="Time">
 		SELECT
-			id, userId, title, imgUrl, content, longitude, latitude, createTime, updateTime, label, praiseNum, checkStatus
+		id, userId, imgUrl, content, longitude, latitude, location, createTime, updateTime, praiseNum, checkStatus
 		FROM
 			time
 		WHERE
@@ -36,14 +36,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		UPDATE
 			time
 		SET
-			<if test="title != null">
-				title = #{title},
-			</if>
 			<if test="content != null">
 				content = #{content},
-			</if>
-			<if test="label != null">
-				label = #{label},
 			</if>
 		WHERE
 			id = #{id}
@@ -69,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="getByUserId" resultType="Time">
 		SELECT
-			title, imgUrl, content, createTime, updateTime, label, praiseNum
+		imgUrl, content, location, createTime, updateTime, praiseNum
 		FROM
 			time
 	  	WHERE
@@ -78,11 +72,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="getByUncheck" resultType="Time">
 		SELECT
-			id, userId, title, imgUrl, content, label
+		id, userId, imgUrl, content
 		FROM
 			time
 		WHERE
 			checkStatus = 0
 	</select>
 
+	<select id="getAllByVisible" resultType="Time">
+		SELECT
+			id,
+			userId,
+			imgUrl,
+			createTime,
+			praiseNum
+		FROM
+			time
+		WHERE
+			visible = #{visible}
+	</select>
+
+	<select id="getAllIdByVisible" resultType="Integer">
+		SELECT id
+		FROM
+			time
+		WHERE
+			visible = #{visible}
+	</select>
 </mapper>  

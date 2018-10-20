@@ -17,8 +17,6 @@ public class TimeCollectionVO implements Serializable {
 
     private Integer userId;
 
-    private String title;
-
     private String imgUrl;
 
     private String content;

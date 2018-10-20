@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.west2.fzuTimeMachine.dao.UserDao">
 
@@ -19,5 +19,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE
 			openId = #{openId}
 	</select>
+
+	<select id="get" resultType="WechatUser">
+		SELECT
+			userId,
+			openId,
+			nickName,
+			gender,
+			avatarUrl,
+			country,
+			province,
+			city,
+			language,
+			createTime
+		FROM
+			wechat_user
+		WHERE
+			userId = #{userId}
+	</select>
+
+	<select id="getSessionIdByUserId" resultType="String">
+		SELECT sessionId
+		FROM
+			wechat_user
+		WHERE
+			userId = #{userId}
+	</select>
+
+	<update id="updateSessionIdByUserId">
+		UPDATE
+			wechat_user
+		SET
+			sessionId = #{sessionId}
+		WHERE
+			userId = #{userId}
+	</update>
 
 </mapper>  

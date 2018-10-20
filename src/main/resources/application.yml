@@ -1,29 +1,8 @@
-server:
-  port: 80
-  servlet:
-    context-path: /
-
 # spring
 spring:
-  # redis
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password:
-    database: 0
-    # 超时(毫秒)
-    timeout: 10000
-    # 连接池配置
-    lettuce:
-      pool:
-        # 最大连接数
-        max-active: 8
-        # 最大阻塞等待时间,-1为无限制
-        max-wait: -1
-        # 最大空闲连接数
-        max-idle: 8
-        # 最小空闲连接数
-        min-idle: 0
+  # 环境配置
+  profiles:
+      active: dev
   # datasource
   datasource:
     # mysql
@@ -31,6 +10,18 @@ spring:
     url: jdbc:mysql://localhost:3306/timemachine?characterEncoding=utf-8
     username: timeMachine
     password: 123456
+    # druid
+    type: com.alibaba.druid.pool.DruidDataSource
+    name: timeDataSource
+    druid:
+      # 连接池初始大小 最小 最大
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      # 连接等待超时
+      maxWait: 60000
+      # 检测空闲连接的时间间隔
+      timeBetweenEvictionRunsMillis: 60000
 
 # mybatis
 mybatis:
@@ -39,8 +30,8 @@ mybatis:
 
 # wechat
 wechat:
-  appID: wx9c06df5e7d4df15d
-  appSecret: 65dc6b37a22a668b187b928e6d2395a1
+  appID: wxe5e6344d65b3d478
+  appSecret: 297f7852f643336bc6383377ea909968
 
 # melody
 javamelody:
@@ -64,7 +55,3 @@ qiniu:
   # 服务器地址,请根据部署的服务器进行变更,推荐使用内网穿透进行测试
   backUrl: http://time.huanglexing.com/time/uploadBack
   cloudUrl: cloud.huanglexing.com/
-
-# swagger 配置接口访问域名
-swagger:
-  host:
