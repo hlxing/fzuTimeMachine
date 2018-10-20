@@ -11,8 +11,6 @@ import java.io.Serializable;
 @Data
 public class TimeMeVO implements Serializable{
 
-    private String title;
-
     private String imgUrl;
 
     private String content;
@@ -20,8 +18,6 @@ public class TimeMeVO implements Serializable{
     private Long createTime;
 
     private Long updateTime;
-
-    private String label;
 
     private Integer praiseNum;
 

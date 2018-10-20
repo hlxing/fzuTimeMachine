@@ -16,11 +16,11 @@ public class Time implements Serializable{
     // 发布者id
     private Integer userId;
 
-    private String title;
-
     private String imgUrl;
 
     private String content;
+
+    private String location;
 
     private Double longitude;
 
@@ -29,8 +29,6 @@ public class Time implements Serializable{
     private Long createTime;
 
     private Long updateTime;
-
-    private String label;
 
     private Integer praiseNum;
 

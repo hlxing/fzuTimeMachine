@@ -52,14 +52,15 @@ public class ShiroConfig {
         Map<String, String> filterRuleMap = new HashMap<>();
 
         // 调试专用
- //       filterRuleMap.put("/**", "anon");
+        filterRuleMap.put("/**", "anon");
 
         // cros
         filterRuleMap.put("/**", "crosFilter");
 
 //        // 匿名访问接口
-        filterRuleMap.put("/miniapp/oauth", "anon");
+        filterRuleMap.put("/user/oauth", "anon");
         filterRuleMap.put("/test/connect", "anon");
+        filterRuleMap.put("/user/login", "anon");
         filterRuleMap.put("/user/xLogin", "anon");
         filterRuleMap.put("/time/uploadBack", "anon");
 
@@ -70,7 +71,7 @@ public class ShiroConfig {
         filterRuleMap.put("/webjars/**", "anon");
 
 //        // 需要登录的接口
-        filterRuleMap.put("/**", "authc,authFilter");
+        filterRuleMap.put("/**", "authFilter,authc");
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);
         return factoryBean;
     }

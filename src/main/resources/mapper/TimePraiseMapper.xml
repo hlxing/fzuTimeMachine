@@ -11,13 +11,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			(#{userId}, #{timeId}, #{createTime})
 	</insert>
 
-	<select id="getByUserId" resultType="TimePraise">
+	<select id="getByUserIdAndTimeId" resultType="TimePraise">
 		SELECT
 			id,userId,timeId,createTime
 		FROM
 			time_praise
 		WHERE
 			userId = #{userId}
+		AND timeId = #{timeId}
 	</select>
 
 	<delete id="deleteByUserId">

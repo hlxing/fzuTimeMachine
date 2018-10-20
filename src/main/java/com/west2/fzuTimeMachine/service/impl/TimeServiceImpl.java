@@ -6,6 +6,7 @@ import com.west2.fzuTimeMachine.config.QiniuConfig;
 import com.west2.fzuTimeMachine.dao.TimeCollectionDao;
 import com.west2.fzuTimeMachine.dao.TimeDao;
 import com.west2.fzuTimeMachine.dao.TimePraiseDao;
+import com.west2.fzuTimeMachine.dao.UserDao;
 import com.west2.fzuTimeMachine.exception.error.ApiException;
 import com.west2.fzuTimeMachine.exception.error.TimeErrorEnum;
 import com.west2.fzuTimeMachine.model.dto.TimeCheckDTO;
@@ -15,15 +16,14 @@ import com.west2.fzuTimeMachine.model.dto.TimeUploadBackDTO;
 import com.west2.fzuTimeMachine.model.po.Time;
 import com.west2.fzuTimeMachine.model.po.TimeCollection;
 import com.west2.fzuTimeMachine.model.po.TimePraise;
-import com.west2.fzuTimeMachine.model.vo.TimeCollectionVO;
-import com.west2.fzuTimeMachine.model.vo.TimeMeVO;
-import com.west2.fzuTimeMachine.model.vo.TimeUnCheckVO;
-import com.west2.fzuTimeMachine.model.vo.TimeUploadVO;
+import com.west2.fzuTimeMachine.model.po.WechatUser;
+import com.west2.fzuTimeMachine.model.vo.*;
 import com.west2.fzuTimeMachine.service.TimeService;
 import com.west2.fzuTimeMachine.util.AESUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,21 +44,28 @@ public class TimeServiceImpl implements TimeService {
 
     private ModelMapper modelMapper;
 
+    private static final String RANK_KEY = "rank";
+
     private TimeDao timeDao;
 
     private TimePraiseDao timePraiseDao;
 
     private TimeCollectionDao timeCollectionDao;
+    private UserDao userDao;
+    private RedisTemplate redisTemplate;
 
     @Autowired
-    public TimeServiceImpl(QiniuConfig qiniuConfig, ObjectMapper jsonMapper,
-                           ModelMapper modelMapper, TimeDao timeDao, TimePraiseDao timePraiseDao, TimeCollectionDao timeCollectionDao) {
+    public TimeServiceImpl(QiniuConfig qiniuConfig, ObjectMapper jsonMapper, ModelMapper modelMapper,
+                           TimeDao timeDao, TimePraiseDao timePraiseDao, TimeCollectionDao timeCollectionDao,
+                           RedisTemplate redisTemplate, UserDao userDao) {
         this.qiniuConfig = qiniuConfig;
         this.jsonMapper = jsonMapper;
         this.modelMapper = modelMapper;
         this.timeDao = timeDao;
         this.timePraiseDao = timePraiseDao;
         this.timeCollectionDao = timeCollectionDao;
+        this.redisTemplate = redisTemplate;
+        this.userDao = userDao;
     }
 
     @Override
@@ -78,6 +85,7 @@ public class TimeServiceImpl implements TimeService {
         time.setCreateTime(now);
         time.setUpdateTime(now);
         time.setPraiseNum(0);
+        time.setLocation(timeUploadDTO.getLocation());
         timeDao.save(time);
 
 
@@ -145,7 +153,7 @@ public class TimeServiceImpl implements TimeService {
 
     @Override
     public void praise(Integer timeId, Integer userId) {
-        TimePraise timePraise = timePraiseDao.getByUserId(userId);
+        TimePraise timePraise = timePraiseDao.getByUserIdAndTimeId(userId, timeId);
         //如果不存在此记录，表示用户没点过赞，添加记录并且文章点赞数+1
         if (timePraise == null) {
             Time time = timeDao.get(timeId);
@@ -157,14 +165,12 @@ public class TimeServiceImpl implements TimeService {
             Long now = System.currentTimeMillis();
             praise.setCreateTime(now);
             timePraiseDao.save(praise);
-            log.info("+1");
         } else {
             //如果存在此纪录,表示用户点过赞，这次是取消点赞，删除记录并且文章点赞数-1
             timePraiseDao.deleteByUserId(timePraise.getUserId());
             Time time = timeDao.get(timeId);
             int praiseNum = time.getPraiseNum() - 1;
             timeDao.updatePraise(timeId, praiseNum);
-            log.info("-1");
         }
     }
 
@@ -231,11 +237,53 @@ public class TimeServiceImpl implements TimeService {
             Time time = timeDao.get(timeCollection.getTimeId());
             timeCollectionVO.setImgUrl(time.getImgUrl());
             timeCollectionVO.setContent(time.getContent());
-            timeCollectionVO.setTitle(time.getTitle());
             timeCollectionVOS.add(timeCollectionVO);
         }
         return timeCollectionVOS;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<TimeRankVO> getRank() {
+        return redisTemplate.opsForList().range(RANK_KEY, 0, -1);
+    }
 
+    @Override
+    public TimeVO explore(Integer userId) {
+        List<Integer> timeList = timeDao.getAllIdByVisible(1);
+        int len = timeList.size();
+        int index = (int) ((System.currentTimeMillis() / 1000) % len);
+        int timeId = timeList.get(index);
+        Time time = timeDao.get(timeId);
+        TimePraise timePraise = timePraiseDao.getByUserIdAndTimeId(userId, timeId);
+        WechatUser wechatUser = userDao.get(time.getUserId());
+        TimeVO timeVO = modelMapper.map(time, TimeVO.class);
+        timeVO.setAvatarUrl(wechatUser.getAvatarUrl());
+        timeVO.setNickName(wechatUser.getNickName());
+        if (timePraise == null) {
+            timeVO.setIsPraise((byte) 0);
+        } else {
+            timeVO.setIsPraise((byte) 1);
+        }
+        return timeVO;
+    }
+
+    @Override
+    public TimeVO get(Integer timeId, Integer userId) {
+        Time time = timeDao.get(timeId);
+        if (time == null) {
+            throw new ApiException(TimeErrorEnum.NOT_FOUND);
+        }
+        TimeVO timeVO = modelMapper.map(time, TimeVO.class);
+        WechatUser wechatUser = userDao.get(time.getUserId());
+        TimePraise timePraise = timePraiseDao.getByUserIdAndTimeId(userId, timeId);
+        timeVO.setAvatarUrl(wechatUser.getAvatarUrl());
+        timeVO.setNickName(wechatUser.getNickName());
+        if (timePraise == null) {
+            timeVO.setIsPraise((byte) 0);
+        } else {
+            timeVO.setIsPraise((byte) 1);
+        }
+        return timeVO;
+    }
 }
