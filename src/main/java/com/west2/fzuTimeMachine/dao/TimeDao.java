@@ -26,4 +26,8 @@ public interface TimeDao {
     List<Time> getByUserId(Integer userId);
 
     List<Time> getByUncheck();
+
+    List<Time> getAllByVisible(@Param("visible") Integer visible);
+
+    List<Integer> getAllIdByVisible(@Param("visible") Integer visible);
 }

@@ -14,10 +14,6 @@ import java.io.Serializable;
 @ApiModel(description = "时光上传传输对象")
 public class TimeUploadDTO implements Serializable{
 
-    @Size(min = 1,max = 16)
-    @ApiModelProperty(required = true, name = "标题", example = "那个食堂")
-    private String title;
-
     @Size(min = 1,max = 1024)
     @ApiModelProperty(required = true, name = "内容", example = "真好吃!")
     private String content;
@@ -30,8 +26,8 @@ public class TimeUploadDTO implements Serializable{
     private Double latitude;
 
     @Size(max = 255)
-    @ApiModelProperty(notes = "标签", example = "食堂+美食")
-    private String label;
+    @ApiModelProperty(notes = "位置", example = "福州大学")
+    private String location;
 
     public TimeUploadDTO() {
 

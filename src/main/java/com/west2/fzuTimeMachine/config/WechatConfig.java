@@ -25,5 +25,4 @@ public class WechatConfig {
         WechatUtil.init(this);
     }
 
-
 }

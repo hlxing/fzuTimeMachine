@@ -22,7 +22,7 @@ public class AuthToken implements AuthenticationToken{
     //获取身份(用户名)
     @Override
     public Object getPrincipal() {
-        return session.getAttribute("unionid");
+        return session.getAttribute("userId");
     }
 
     //获取凭证(密码)
@@ -33,6 +33,6 @@ public class AuthToken implements AuthenticationToken{
 
     @Override
     public String toString() {
-        return session.getAttribute("userId") + ":" + session.getId();
+        return session.getAttribute("sessionId") + ":" + session.getId();
     }
 }

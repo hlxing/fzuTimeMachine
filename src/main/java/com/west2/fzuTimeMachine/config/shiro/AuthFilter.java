@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * @description: 认证拦截器,拦截登录请求,自定义登录逻辑
+ * @description: 认证拦截器, 拦截登录请求, 自定义登录逻辑
  * @author: hlx 2018-08-19
  **/
-public class AuthFilter extends BasicHttpAuthenticationFilter{
+public class AuthFilter extends BasicHttpAuthenticationFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 
