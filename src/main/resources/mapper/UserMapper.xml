@@ -11,9 +11,18 @@
 			(null,#{openId},#{nickName},#{gender},#{avatarUrl},#{country},#{province},#{city},#{language},#{createTime})
 	</insert>
 
-	<select id="getByOpenId" resultType="WechatUser">
+    <select id="getInfo" resultType="WechatUser">
+        SELECT
+        userId, nickName, avatarUrl
+        FROM
+        wechat_user
+        WHERE
+        userId = #{userId}
+    </select>
+
+    <select id="getByOpenId" resultType="WechatUser">
 		SELECT
-			userId,openId, nickName, gender, avatarUrl, country, province, city, language, createTime
+        userId, openId, nickName, gender, avatarUrl, country, province, city, language, createTime
 		FROM
 			wechat_user
 		WHERE

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
  **/
 public class CROSFilter extends BasicHttpAuthenticationFilter {
 
-    //不阻挡所有请求，请求的最终合法性由接口上的注解判断-*
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;

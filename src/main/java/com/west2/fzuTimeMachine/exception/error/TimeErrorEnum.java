@@ -15,8 +15,6 @@ public enum TimeErrorEnum implements ApiError{
     // 非自己时光
     NOT_ME(132, "NOT_ME"),
 
-    COLLECTION_EXIST(133, "COLLECTION_EXIST"),
-
     COLLECTION_NOT_FOUND(134, "COLLECTION_NOT_FOUND"),
 
     COLLECTION_NOT_ME(135, "COLLECTION_NOT_ME");

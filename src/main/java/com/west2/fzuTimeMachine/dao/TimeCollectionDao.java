@@ -16,9 +16,9 @@ public interface TimeCollectionDao {
 
     TimeCollection get(@Param("id") Integer id);
 
-    void delete(@Param("id") Integer id);
-
     List<TimeCollection> getByUserId(@Param("userId") Integer userId);
 
-    TimeCollection getByTimeIdAndUserId(@Param("timeId") Integer timeId,@Param("userId") Integer userId);
+    TimeCollection getByTimeIdAndUserId(@Param("timeId") Integer timeId, @Param("userId") Integer userId);
+
+    void deleteByUserIdAndTimeId(@Param("userId") Integer userId, @Param("timeId") Integer timeId);
 }

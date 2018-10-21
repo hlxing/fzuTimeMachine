@@ -19,5 +19,9 @@ public class TimeCollectionVO implements Serializable {
 
     private String imgUrl;
 
-    private String content;
+    private Long updateTime;
+
+    private String nickName;
+
+    private String avatarUrl;
 }

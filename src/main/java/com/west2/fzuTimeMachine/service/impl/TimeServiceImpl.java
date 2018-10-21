@@ -154,9 +154,12 @@ public class TimeServiceImpl implements TimeService {
     @Override
     public void praise(Integer timeId, Integer userId) {
         TimePraise timePraise = timePraiseDao.getByUserIdAndTimeId(userId, timeId);
+        Time time = timeDao.get(timeId);
+        if (time == null) {
+            throw new ApiException(TimeErrorEnum.NOT_FOUND);
+        }
         //如果不存在此记录，表示用户没点过赞，添加记录并且文章点赞数+1
         if (timePraise == null) {
-            Time time = timeDao.get(timeId);
             int praiseNum = time.getPraiseNum() + 1;
             timeDao.updatePraise(timeId, praiseNum);
             TimePraise praise = new TimePraise();
@@ -167,8 +170,7 @@ public class TimeServiceImpl implements TimeService {
             timePraiseDao.save(praise);
         } else {
             //如果存在此纪录,表示用户点过赞，这次是取消点赞，删除记录并且文章点赞数-1
-            timePraiseDao.deleteByUserId(timePraise.getUserId());
-            Time time = timeDao.get(timeId);
+            timePraiseDao.deleteByUserIdAndTimeId(timePraise.getUserId(), timeId);
             int praiseNum = time.getPraiseNum() - 1;
             timeDao.updatePraise(timeId, praiseNum);
         }
@@ -202,6 +204,10 @@ public class TimeServiceImpl implements TimeService {
     @Override
     public void Collect(Integer timeId, Integer userId) {
         TimeCollection timeCollection = timeCollectionDao.getByTimeIdAndUserId(timeId, userId);
+        Time time = timeDao.get(timeId);
+        if (time == null) {
+            throw new ApiException(TimeErrorEnum.NOT_FOUND);
+        }
         if (timeCollection == null) {
             TimeCollection collection = new TimeCollection();
             collection.setTimeId(timeId);
@@ -210,20 +216,8 @@ public class TimeServiceImpl implements TimeService {
             collection.setCreateTime(now);
             timeCollectionDao.save(collection);
         } else {
-            throw new ApiException(TimeErrorEnum.COLLECTION_EXIST);
-        }
-
-    }
-
-    @Override
-    public void unCollect(Integer id, Integer userId) {
-        TimeCollection timeCollection = timeCollectionDao.get(id);
-        if (timeCollection == null) {
-            throw new ApiException(TimeErrorEnum.COLLECTION_NOT_FOUND);
-        } else if (!timeCollection.getUserId().equals(userId)) {
-            throw new ApiException(TimeErrorEnum.COLLECTION_NOT_ME);
-        } else {
-            timeCollectionDao.delete(id);
+            //如果存在此纪录,表示用户收藏，这次是取消收藏
+            timeCollectionDao.deleteByUserIdAndTimeId(userId, timeId);
         }
 
     }
@@ -235,8 +229,11 @@ public class TimeServiceImpl implements TimeService {
         for (TimeCollection timeCollection : timeCollectionList) {
             TimeCollectionVO timeCollectionVO = modelMapper.map(timeCollection, TimeCollectionVO.class);
             Time time = timeDao.get(timeCollection.getTimeId());
+            WechatUser wechatUser = userDao.get(time.getUserId());
             timeCollectionVO.setImgUrl(time.getImgUrl());
-            timeCollectionVO.setContent(time.getContent());
+            timeCollectionVO.setUpdateTime(time.getUpdateTime());
+            timeCollectionVO.setAvatarUrl(wechatUser.getAvatarUrl());
+            timeCollectionVO.setNickName(wechatUser.getNickName());
             timeCollectionVOS.add(timeCollectionVO);
         }
         return timeCollectionVOS;
@@ -256,6 +253,7 @@ public class TimeServiceImpl implements TimeService {
         int timeId = timeList.get(index);
         Time time = timeDao.get(timeId);
         TimePraise timePraise = timePraiseDao.getByUserIdAndTimeId(userId, timeId);
+        TimeCollection timeCollection = timeCollectionDao.getByTimeIdAndUserId(timeId, userId);
         WechatUser wechatUser = userDao.get(time.getUserId());
         TimeVO timeVO = modelMapper.map(time, TimeVO.class);
         timeVO.setAvatarUrl(wechatUser.getAvatarUrl());
@@ -264,6 +262,11 @@ public class TimeServiceImpl implements TimeService {
             timeVO.setIsPraise((byte) 0);
         } else {
             timeVO.setIsPraise((byte) 1);
+        }
+        if (timeCollection == null) {
+            timeVO.setIsCollect((byte) 0);
+        } else {
+            timeVO.setIsCollect((byte) 1);
         }
         return timeVO;
     }
@@ -277,6 +280,7 @@ public class TimeServiceImpl implements TimeService {
         TimeVO timeVO = modelMapper.map(time, TimeVO.class);
         WechatUser wechatUser = userDao.get(time.getUserId());
         TimePraise timePraise = timePraiseDao.getByUserIdAndTimeId(userId, timeId);
+        TimeCollection timeCollection = timeCollectionDao.getByTimeIdAndUserId(timeId, userId);
         timeVO.setAvatarUrl(wechatUser.getAvatarUrl());
         timeVO.setNickName(wechatUser.getNickName());
         if (timePraise == null) {
@@ -284,6 +288,22 @@ public class TimeServiceImpl implements TimeService {
         } else {
             timeVO.setIsPraise((byte) 1);
         }
+        if (timeCollection == null) {
+            timeVO.setIsCollect((byte) 0);
+        } else {
+            timeVO.setIsCollect((byte) 1);
+        }
         return timeVO;
+    }
+
+    @Override
+    public List<TimeMapVO> getMap() {
+        List<Time> timeList = timeDao.getMap();
+        List<TimeMapVO> timeMapVOS = new ArrayList<>();
+        timeList.forEach((time) -> {
+            TimeMapVO timeMapVO = modelMapper.map(time, TimeMapVO.class);
+            timeMapVOS.add(timeMapVO);
+        });
+        return timeMapVOS;
     }
 }

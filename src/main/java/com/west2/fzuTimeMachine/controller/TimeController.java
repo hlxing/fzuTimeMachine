@@ -110,21 +110,12 @@ public class TimeController {
         return apiResult;
     }
 
-    @ApiOperation(value = "收藏时光", notes = "收藏喜欢的时光")
+    @ApiOperation(value = "收藏时光", notes = "收藏喜欢的时光,如果收藏则取消")
     @GetMapping("/collect")
     public ApiResult<String> collect(@RequestParam("timeId") @NotNull Integer timeId, HttpSession session) {
         ApiResult<String> apiResult = new ApiResult<>();
         timeService.Collect(timeId, (Integer) session.getAttribute("userId"));
         apiResult.setText("collect time success");
-        return apiResult;
-    }
-
-    @ApiOperation(value = "取消收藏时光", notes = "删除已经收藏的时光")
-    @GetMapping("/unCollect")
-    public ApiResult<String> unCollect(@RequestParam("id") @NotNull Integer id, HttpSession session) {
-        ApiResult<String> apiResult = new ApiResult<>();
-        timeService.unCollect(id, (Integer) session.getAttribute("userId"));
-        apiResult.setText("unCollect time success");
         return apiResult;
     }
 
@@ -156,11 +147,20 @@ public class TimeController {
     }
 
     @ApiOperation(value = "时光详情")
-    @GetMapping("/{timeId}")
-    public ApiResult<TimeVO> get(@PathVariable("timeId") Integer timeId, HttpSession session) {
+    @GetMapping("/detail/{timeId}")
+    public ApiResult<TimeVO> get(@PathVariable("timeId") @NotNull Integer timeId, HttpSession session) {
         ApiResult<TimeVO> apiResult = new ApiResult<>();
         TimeVO timeVO = timeService.get(timeId, (Integer) session.getAttribute("userId"));
         apiResult.setData(timeVO);
+        return apiResult;
+    }
+
+    @ApiOperation(value = "时光地图", notes = "时光的经纬度")
+    @GetMapping("map")
+    public ApiResult<List<TimeMapVO>> getMap() {
+        ApiResult<List<TimeMapVO>> apiResult = new ApiResult<>();
+        List<TimeMapVO> timeMapVOS = timeService.getMap();
+        apiResult.setData(timeMapVOS);
         return apiResult;
     }
 

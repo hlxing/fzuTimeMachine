@@ -7,12 +7,13 @@ import com.west2.fzuTimeMachine.model.dto.UserAdminLoginDTO;
 import com.west2.fzuTimeMachine.model.dto.UserOAuthDTO;
 import com.west2.fzuTimeMachine.model.po.Jscode2session;
 import com.west2.fzuTimeMachine.model.po.WechatUser;
+import com.west2.fzuTimeMachine.model.vo.UserVO;
 import com.west2.fzuTimeMachine.service.UserService;
 import com.west2.fzuTimeMachine.util.AESUtil;
 import com.west2.fzuTimeMachine.util.WechatUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +28,21 @@ import javax.servlet.http.HttpSession;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private ModelMapper modelMapper;
+
     private UserDao userDao;
 
     // 数据库session-AES-密钥
     private static final String SESSION_PWD = "8X1V2EoXH79CZ3zS";
+
     // Spring-Session-Redis操作DAO,管理控制session
     private RedisOperationsSessionRepository sessionRepository;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, RedisOperationsSessionRepository sessionRepository) {
+    public UserServiceImpl(UserDao userDao, RedisOperationsSessionRepository sessionRepository, ModelMapper modelMapper) {
         this.userDao = userDao;
         this.sessionRepository = sessionRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -85,6 +90,7 @@ public class UserServiceImpl implements UserService {
         }
 
         HttpSession httpSession = request.getSession(true);
+        httpSession.setMaxInactiveInterval(3600 * 24);
         httpSession.setAttribute("userId", userId);
         httpSession.setAttribute("sessionKey", sessionKey);
 
@@ -101,6 +107,12 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new ApiException(UserErrorEnum.PASS_INVALID);
         }
+    }
+
+    @Override
+    public UserVO getMe(Integer userId) {
+        WechatUser wechatUser = userDao.getInfo(userId);
+        return modelMapper.map(wechatUser, UserVO.class);
     }
 
 

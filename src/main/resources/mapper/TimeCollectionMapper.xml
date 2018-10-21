@@ -29,12 +29,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			timeid = #{timeId} and userId = #{userId}
 	</select>
 
-	<delete id="delete">
+	<delete id="deleteByUserIdAndTimeId">
 		DELETE
 		FROM
 			time_collection
 		WHERE
-			id = #{id}
+		userId = #{userId}
+		AND timeId = #{timeId}
 	</delete>
 
 	<select id="get" resultType="TimeCollection">
