@@ -30,4 +30,6 @@ public interface TimeDao {
     List<Time> getAllByVisible(@Param("visible") Integer visible);
 
     List<Integer> getAllIdByVisible(@Param("visible") Integer visible);
+
+    List<Time> getMap();
 }

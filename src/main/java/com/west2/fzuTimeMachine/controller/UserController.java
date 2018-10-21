@@ -3,6 +3,7 @@ package com.west2.fzuTimeMachine.controller;
 import com.west2.fzuTimeMachine.model.dto.UserAdminLoginDTO;
 import com.west2.fzuTimeMachine.model.dto.UserOAuthDTO;
 import com.west2.fzuTimeMachine.model.po.ApiResult;
+import com.west2.fzuTimeMachine.model.vo.UserVO;
 import com.west2.fzuTimeMachine.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -44,8 +46,8 @@ public class UserController {
     @ApiOperation(value = "登录", notes = "已经授权的情况下进行")
     @ApiImplicitParam(name = "code", value = "微信短期凭证")
     @GetMapping("/login")
-    public ApiResult<String> login(@RequestParam("code") @Size(min = 1,max = 255) String code,HttpServletRequest request) {
-        userService.login(code,request);
+    public ApiResult<String> login(@RequestParam("code") @Size(min = 1, max = 255) String code, HttpServletRequest request) {
+        userService.login(code, request);
         ApiResult<String> apiResult = new ApiResult<>();
         apiResult.setText("login success");
         return apiResult;
@@ -64,8 +66,17 @@ public class UserController {
     @PostMapping("/adminLogin")
     public ApiResult<String> adminLogin(@RequestBody @Valid UserAdminLoginDTO userAdminLoginDTO, HttpServletRequest request) {
         ApiResult<String> apiResult = new ApiResult<>();
-        userService.adminLogin(userAdminLoginDTO,request);
+        userService.adminLogin(userAdminLoginDTO, request);
         apiResult.setText("admin login success");
+        return apiResult;
+    }
+
+    @ApiOperation(value = "个人信息")
+    @GetMapping("/me")
+    public ApiResult<UserVO> getMe(HttpSession session) {
+        ApiResult<UserVO> apiResult = new ApiResult<>();
+        UserVO userVO = userService.getMe((Integer) session.getAttribute("userId"));
+        apiResult.setData(userVO);
         return apiResult;
     }
 

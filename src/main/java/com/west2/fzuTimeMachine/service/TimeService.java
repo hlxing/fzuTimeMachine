@@ -72,10 +72,6 @@ public interface TimeService {
      */
     void Collect(Integer timeId, Integer userId);
 
-    /**
-     * 取消收藏
-     */
-    void unCollect(Integer id, Integer userId);
 
     /**
      * 获取时光收藏
@@ -99,10 +95,16 @@ public interface TimeService {
 
     /**
      * 获取时光
-     *
      * @param timeId 时光id
      * @param userId 用户id
      * @return 时光视图
      */
     TimeVO get(Integer timeId, Integer userId);
+
+    /**
+     * 获取时光地图
+     *
+     * @return 时光地图视图
+     */
+    List<TimeMapVO> getMap();
 }

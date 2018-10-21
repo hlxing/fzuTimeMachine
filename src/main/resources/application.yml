@@ -1,5 +1,8 @@
 # spring
 spring:
+  # session
+  session:
+    timeout: 86400
   # 环境配置
   profiles:
       active: dev

@@ -51,7 +51,7 @@ public class RankScheduler {
         List<TimeRankDTO> timeRankDTOS = new ArrayList<>();
         for (Time time : timeList) {
             Double diffHour = (now - time.getCreateTime()) / (1000 * 3600.0);
-            Double score = (1 + time.getPraiseNum()) / Math.pow(diffHour, 1.8);
+            Double score = (1 + time.getPraiseNum()) * 6.6 / Math.pow(diffHour, 1.8);
             TimeRankDTO timeRankDTO = modelMapper.map(time, TimeRankDTO.class);
             timeRankDTO.setScore(score);
             timeRankDTOS.add(timeRankDTO);

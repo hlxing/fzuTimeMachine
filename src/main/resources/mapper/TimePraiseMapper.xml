@@ -21,12 +21,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND timeId = #{timeId}
 	</select>
 
-	<delete id="deleteByUserId">
+    <delete id="deleteByUserIdAndTimeId">
 		DELETE
 		FROM
 			time_praise
 		WHERE
 			userId = #{userId}
+        AND timeId = #{timeId}
 	</delete>
 
 </mapper>  

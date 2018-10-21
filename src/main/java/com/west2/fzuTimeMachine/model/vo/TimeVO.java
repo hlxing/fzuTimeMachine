@@ -29,6 +29,8 @@ public class TimeVO {
 
     private Byte isPraise;
 
+    private Byte isCollect;
+
     public TimeVO() {
     }
 

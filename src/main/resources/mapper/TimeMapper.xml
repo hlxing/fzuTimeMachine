@@ -25,7 +25,7 @@
 
 	<select id="get" resultType="Time">
 		SELECT
-		id, userId, imgUrl, content, longitude, latitude, location, createTime, updateTime, praiseNum, checkStatus
+        id, userId, imgUrl, content, longitude, latitude, location, createTime, updateTime, praiseNum, checkStatus
 		FROM
 			time
 		WHERE
@@ -100,10 +100,21 @@
 	</select>
 
 	<select id="getAllIdByVisible" resultType="Integer">
-		SELECT id
+        SELECT
+        id
 		FROM
 			time
 		WHERE
 			visible = #{visible}
 	</select>
+
+    <select id="getMap" resultType="Time">
+        SELECT
+        longitude,latitude,id
+        FROM
+        time
+        WHERE
+        visible = 1
+    </select>
+
 </mapper>  

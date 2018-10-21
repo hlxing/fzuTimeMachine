@@ -3,6 +3,7 @@ package com.west2.fzuTimeMachine.exception.resolver;
 import com.west2.fzuTimeMachine.exception.error.ApiException;
 import com.west2.fzuTimeMachine.model.po.ApiResult;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authc.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,6 +25,17 @@ import java.util.Collection;
 @Slf4j
 @ControllerAdvice
 public class ApiExceptionResolver {
+
+    // AuthenticationException 异常处理(session引起)
+    @ExceptionHandler(value = AuthenticationException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ApiResult<String> resolveSessionException(AuthenticationException e) {
+        ApiResult<String> apiResult = new ApiResult<>();
+        log.info("捕获异常:" + e.getMessage());
+        apiResult.setText("SESSION_INVALID");
+        return apiResult;
+    }
 
     // Exception异常处理(未知错误引起)
     @ExceptionHandler(value = {Exception.class})

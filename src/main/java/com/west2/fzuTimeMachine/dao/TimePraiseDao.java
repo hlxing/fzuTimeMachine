@@ -14,5 +14,5 @@ public interface TimePraiseDao {
 
     TimePraise getByUserIdAndTimeId(@Param("userId") Integer userId, @Param("timeId") Integer timeId);
 
-    void deleteByUserId(@Param("userId") Integer userId);
+    void deleteByUserIdAndTimeId(@Param("userId") Integer userId, @Param("timeId") Integer timeId);
 }

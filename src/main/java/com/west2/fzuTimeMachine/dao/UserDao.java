@@ -1,6 +1,7 @@
 package com.west2.fzuTimeMachine.dao;
 
 import com.west2.fzuTimeMachine.model.po.WechatUser;
+import com.west2.fzuTimeMachine.model.vo.UserVO;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -18,4 +19,6 @@ public interface UserDao {
     String getSessionIdByUserId(Integer userId);
 
     void updateSessionIdByUserId(@Param("userId") Integer userId, @Param("sessionId") String sessionId);
+
+    WechatUser getInfo(Integer userId);
 }

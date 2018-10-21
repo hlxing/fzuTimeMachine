@@ -2,6 +2,7 @@ package com.west2.fzuTimeMachine.service;
 
 import com.west2.fzuTimeMachine.model.dto.UserAdminLoginDTO;
 import com.west2.fzuTimeMachine.model.dto.UserOAuthDTO;
+import com.west2.fzuTimeMachine.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,4 +33,12 @@ public interface UserService {
      * @param request 请求
      */
     void adminLogin(UserAdminLoginDTO userAdminLoginDTO, HttpServletRequest request);
+
+    /**
+     * 获取个人信息
+     *
+     * @param userId 用户id
+     * @return 用户视图
+     */
+    UserVO getMe(Integer userId);
 }
