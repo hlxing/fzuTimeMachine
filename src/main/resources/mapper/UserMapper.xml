@@ -65,5 +65,4 @@
 			userId = #{userId}
 	</update>
 
-
 </mapper>  

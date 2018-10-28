@@ -13,8 +13,8 @@ public enum UserErrorEnum implements ApiError {
     // 尚未注册
     OAUTH_NOT_FOUND(131,"OAUTH_NOT_FOUND"),
 
-    // 账号密码错误
-    PASS_INVALID(133, "PASS_INVALID");
+    // 用户已经存在
+    EXIST(132, "EXIST"),
 
     // 响应码
     private final int code;
