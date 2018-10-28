@@ -7,6 +7,7 @@ import com.west2.fzuTimeMachine.model.dto.TimeRankDTO;
 import com.west2.fzuTimeMachine.model.po.Time;
 import com.west2.fzuTimeMachine.model.po.WechatUser;
 import com.west2.fzuTimeMachine.model.vo.TimeRankVO;
+import com.west2.fzuTimeMachine.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,24 +29,45 @@ import java.util.List;
 public class RankScheduler {
 
     private static final int RANK_SIZE = 10;
+
     private static final String RANK_KEY = "rank";
+
     private RedisTemplate redisTemplate;
+
+    private RedisService redisService;
+
     private TimeDao timeDao;
+
     private UserDao userDao;
+
     private ModelMapper modelMapper;
 
     @Autowired
     public RankScheduler(RedisTemplate redisTemplate, TimeDao timeDao,
-                         ModelMapper modelMapper, UserDao userDao) {
+                         ModelMapper modelMapper, UserDao userDao,
+                         RedisService redisService) {
         this.redisTemplate = redisTemplate;
         this.timeDao = timeDao;
         this.modelMapper = modelMapper;
         this.userDao = userDao;
+        this.redisService = redisService;
+    }
+
+
+    @Scheduled(cron = "0 0/1 * * * *")
+    public void calculateRank() {
+        String value = String.valueOf(System.currentTimeMillis());
+        boolean getLock = redisService.tryLock("rank", value);
+        if (getLock) {
+            log.info("get lock success");
+            push();
+            redisService.unLock("rank", value);
+            log.info("unlock success");
+        }
     }
 
     @SuppressWarnings("unchecked")
-    @Scheduled(cron = "0 0/1 * * * *")
-    public void calculateRank() {
+    private void push() {
         Long now = System.currentTimeMillis();
         List<Time> timeList = timeDao.getAllByVisible(1);
         List<TimeRankDTO> timeRankDTOS = new ArrayList<>();
@@ -58,8 +80,6 @@ public class RankScheduler {
         }
         Collections.sort(timeRankDTOS);
         List<TimeRankDTO> timeTopRankDTOS = Ordering.natural().greatestOf(timeRankDTOS, RANK_SIZE);
-        //Long now2 = System.currentTimeMillis();
-        // log.info("cal-rank t->> " + (now2 - now));
 
         // 清空排行榜
         redisTemplate.delete(RANK_KEY);
@@ -71,7 +91,6 @@ public class RankScheduler {
             timeRankVO.setNickName(wechatUser.getNickName());
             redisTemplate.opsForList().rightPush(RANK_KEY, timeRankVO);
         });
-
     }
 
 }
