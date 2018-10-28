@@ -13,11 +13,7 @@ public enum TimeErrorEnum implements ApiError{
     NOT_FOUND(131,"NOT_FOUND"),
 
     // 非自己时光
-    NOT_ME(132, "NOT_ME"),
-
-    COLLECTION_NOT_FOUND(134, "COLLECTION_NOT_FOUND"),
-
-    COLLECTION_NOT_ME(135, "COLLECTION_NOT_ME");
+    NOT_ME(132, "NOT_ME");
 
     private Integer code;
 

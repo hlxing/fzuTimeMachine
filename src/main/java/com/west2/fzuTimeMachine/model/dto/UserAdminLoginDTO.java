@@ -3,6 +3,7 @@ package com.west2.fzuTimeMachine.model.dto;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -13,8 +14,10 @@ import java.io.Serializable;
 @ApiModel(description = "管理员登录传输对象")
 public class UserAdminLoginDTO implements Serializable{
 
+    @NotNull
     private String name;
 
+    @NotNull
     private String pass;
 
     public UserAdminLoginDTO() {

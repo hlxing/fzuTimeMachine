@@ -16,9 +16,6 @@ public enum UserErrorEnum implements ApiError {
     // 用户已经存在
     EXIST(132, "EXIST"),
 
-    // 账号密码错误
-    PASS_INVALID(133, "PASS_INVALID");
-
     // 响应码
     private final int code;
 

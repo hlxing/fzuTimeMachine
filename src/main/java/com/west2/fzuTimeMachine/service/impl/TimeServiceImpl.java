@@ -2,6 +2,7 @@ package com.west2.fzuTimeMachine.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageHelper;
 import com.west2.fzuTimeMachine.config.QiniuConfig;
 import com.west2.fzuTimeMachine.dao.TimeCollectionDao;
 import com.west2.fzuTimeMachine.dao.TimeDao;
@@ -104,6 +105,7 @@ public class TimeServiceImpl implements TimeService {
         }
 
         TimeUploadVO timeUploadVO = new TimeUploadVO();
+        timeUploadVO.setId(timeId);
         timeUploadVO.setKey(key);
         timeUploadVO.setUploadToken(qiniuConfig.createToken(key));
         return timeUploadVO;
@@ -122,10 +124,13 @@ public class TimeServiceImpl implements TimeService {
     }
 
     @Override
-    public void update(TimeUpdateDTO timeUpdateDTO) {
+    public void update(TimeUpdateDTO timeUpdateDTO, Integer userId) {
         Time time = timeDao.get(timeUpdateDTO.getTimeId());
         if (time != null) {
-            timeDao.update(modelMapper.map(timeUpdateDTO, Time.class));
+            if (time.getUserId().equals(userId))
+                timeDao.update(modelMapper.map(timeUpdateDTO, Time.class));
+            else
+                throw new ApiException(TimeErrorEnum.NOT_ME);
         } else {
             throw new ApiException(TimeErrorEnum.NOT_FOUND);
         }
@@ -249,7 +254,7 @@ public class TimeServiceImpl implements TimeService {
     public TimeVO explore(Integer userId) {
         List<Integer> timeList = timeDao.getAllIdByVisible(1);
         int len = timeList.size();
-        int index = (int) ((System.currentTimeMillis() / 1000) % len);
+        int index = (int) ((System.currentTimeMillis()) % len);
         int timeId = timeList.get(index);
         Time time = timeDao.get(timeId);
         TimePraise timePraise = timePraiseDao.getByUserIdAndTimeId(userId, timeId);
@@ -298,6 +303,7 @@ public class TimeServiceImpl implements TimeService {
 
     @Override
     public List<TimeMapVO> getMap() {
+        PageHelper.startPage(1, 100);
         List<Time> timeList = timeDao.getMap();
         List<TimeMapVO> timeMapVOS = new ArrayList<>();
         timeList.forEach((time) -> {

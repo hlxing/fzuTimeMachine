@@ -1,6 +1,5 @@
 package com.west2.fzuTimeMachine.config.shiro;
 
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,7 @@ public class AuthFilter extends BasicHttpAuthenticationFilter {
         HttpSession httpSession = httpServletRequest.getSession(false);
         // 无session代表请求头无session标志,或者该session标志无效(过期/错误)
         if (httpSession == null) {
-            throw new AuthenticationException("Invalid Session");
+            return false;
         }
         AuthToken authToken = new AuthToken(httpSession);
         //登录判断,错误则抛出异常

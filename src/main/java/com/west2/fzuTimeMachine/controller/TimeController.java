@@ -53,11 +53,12 @@ public class TimeController {
         return apiResult;
     }
 
-    @ApiOperation(value = "时光修改", notes = "修改时光标题、内容、标签")
+
+    @ApiOperation(value = "时光修改", notes = "修改内容")
     @PostMapping("/update")
-    public ApiResult<String> updateTime(@RequestBody TimeUpdateDTO timeUpdateDTO) {
+    public ApiResult<String> updateTime(@RequestBody TimeUpdateDTO timeUpdateDTO, HttpSession session) {
         ApiResult<String> apiResult = new ApiResult<>();
-        timeService.update(timeUpdateDTO);
+        timeService.update(timeUpdateDTO, (Integer) session.getAttribute("userId"));
         apiResult.setText("update time success");
         return apiResult;
     }
@@ -156,7 +157,7 @@ public class TimeController {
     }
 
     @ApiOperation(value = "时光地图", notes = "时光的经纬度")
-    @GetMapping("map")
+    @GetMapping("/map")
     public ApiResult<List<TimeMapVO>> getMap() {
         ApiResult<List<TimeMapVO>> apiResult = new ApiResult<>();
         List<TimeMapVO> timeMapVOS = timeService.getMap();

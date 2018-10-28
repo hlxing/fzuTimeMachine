@@ -13,12 +13,8 @@ public class TimeUpdateDTO implements Serializable {
 
     private Integer timeId;
 
-    private String title;
-
     private String content;
-
-    private String label;
-
+  
     public TimeUpdateDTO() {
 
     }

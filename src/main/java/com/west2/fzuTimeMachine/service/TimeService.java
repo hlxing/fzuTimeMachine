@@ -32,7 +32,7 @@ public interface TimeService {
     /**
      * 时光内容更新
      */
-    void update(TimeUpdateDTO timeUpdateDTO);
+    void update(TimeUpdateDTO timeUpdateDTO, Integer userId);
 
     /**
      * 时光删除
