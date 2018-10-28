@@ -33,6 +33,6 @@ public class AuthToken implements AuthenticationToken{
 
     @Override
     public String toString() {
-        return session.getAttribute("sessionId") + ":" + session.getId();
+        return "sessionId" + ":" + session.getId();
     }
 }
