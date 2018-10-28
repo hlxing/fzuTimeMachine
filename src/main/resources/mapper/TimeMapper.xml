@@ -6,11 +6,11 @@
 
 	<insert id="save" parameterType="Time" keyProperty="id" useGeneratedKeys="true">
 		INSERT INTO
-		time(userId, imgUrl, content, longitude, latitude, location, createTime, updateTime,
+			time(userId, imgUrl, content, longitude, latitude, location, createTime, updateTime,
 				 praiseNum, checkStatus, visible)
 		VALUES
-		(#{userId}, #{imgUrl}, #{content}, #{longitude}, #{latitude}, #{location} , #{createTime}, #{updateTime}
-		, #{praiseNum}, #{checkStatus}, #{visible})
+			(#{userId}, #{imgUrl}, #{content}, #{longitude}, #{latitude}, #{location} , #{createTime}, #{updateTime}
+			, #{praiseNum}, #{checkStatus}, #{visible})
 	</insert>
 
 	<update id="updateStatusAndVisible">
@@ -25,7 +25,7 @@
 
 	<select id="get" resultType="Time">
 		SELECT
-        id, userId, imgUrl, content, longitude, latitude, location, createTime, updateTime, praiseNum, checkStatus
+        	id, userId, imgUrl, content, longitude, latitude, location, createTime, updateTime, praiseNum, checkStatus
 		FROM
 			time
 		WHERE
@@ -70,7 +70,7 @@
 
 	<select id="getByUserId" resultType="Time">
 		SELECT
-		id, imgUrl, content, location, createTime, updateTime, praiseNum
+			id, imgUrl, content, location, createTime, updateTime, praiseNum
 		FROM
 			time
 	  	WHERE
@@ -79,7 +79,7 @@
 
 	<select id="getByUncheck" resultType="Time">
 		SELECT
-		id, userId, imgUrl, content
+			id, userId, imgUrl, content
 		FROM
 			time
 		WHERE
@@ -101,7 +101,7 @@
 
 	<select id="getAllIdByVisible" resultType="Integer">
         SELECT
-        id
+        	id
 		FROM
 			time
 		WHERE
@@ -110,13 +110,13 @@
 
     <select id="getMap" resultType="Time">
         SELECT
-		longitude,latitude,id
+			longitude,latitude,id
         FROM
-		time
+			time
         WHERE
-		visible = 1
+			visible = 1
 		ORDER BY
-		createTime DESC
+			createTime DESC
     </select>
 
 </mapper>  
