@@ -2,6 +2,7 @@ package com.west2.fzuTimeMachine.model.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -11,8 +12,10 @@ import java.io.Serializable;
 @Data
 public class TimeUploadBackDTO implements Serializable{
 
+    @NotNull
     private String id;
 
+    @NotNull
     private String encryptedId;
 
     public TimeUploadBackDTO() {
