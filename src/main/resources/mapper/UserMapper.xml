@@ -13,16 +13,16 @@
 
     <select id="getInfo" resultType="WechatUser">
         SELECT
-        userId, nickName, avatarUrl
+        	userId, nickName, avatarUrl
         FROM
-        wechat_user
+        	wechat_user
         WHERE
-        userId = #{userId}
+        	userId = #{userId}
     </select>
 
     <select id="getByOpenId" resultType="WechatUser">
 		SELECT
-        userId, openId, nickName, gender, avatarUrl, country, province, city, language, createTime
+        	userId, openId, nickName, gender, avatarUrl, country, province, city, language, createTime
 		FROM
 			wechat_user
 		WHERE
@@ -48,7 +48,8 @@
 	</select>
 
 	<select id="getSessionIdByUserId" resultType="String">
-		SELECT sessionId
+		SELECT
+			sessionId
 		FROM
 			wechat_user
 		WHERE
@@ -63,5 +64,6 @@
 		WHERE
 			userId = #{userId}
 	</update>
+
 
 </mapper>  
