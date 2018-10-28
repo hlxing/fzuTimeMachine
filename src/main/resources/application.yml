@@ -1,11 +1,11 @@
 # spring
 spring:
-  # session
-  session:
-    timeout: 86400
   # 环境配置
   profiles:
       active: dev
+  # session
+  session:
+    timeout: 86400
   # datasource
   datasource:
     # mysql
@@ -18,13 +18,41 @@ spring:
     name: timeDataSource
     druid:
       # 连接池初始大小 最小 最大
-      initialSize: 5
-      minIdle: 5
+      initialSize: 1
+      minIdle: 1
       maxActive: 20
       # 连接等待超时
       maxWait: 60000
       # 检测空闲连接的时间间隔
       timeBetweenEvictionRunsMillis: 60000
+      # 连接在池中最小生存的时间
+      minEvictableIdleTimeMillis: 300000
+      # 检测连接为有效 sql
+      validationQuery: select 'x'
+      # 关闭监控
+      web-stat-filter:
+        enabled: false
+      stat-view-servlet:
+        enabled: false
+  # redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    database: 0
+    # 超时(毫秒)
+    timeout: 10000
+    # 连接池配置
+    lettuce:
+      pool:
+        # 最大连接数
+        max-active: 8
+        # 最大阻塞等待时间,-1为无限制
+        max-wait: -1
+        # 最大空闲连接数
+        max-idle: 8
+        # 最小空闲连接数
+        min-idle: 0
 
 # mybatis
 mybatis:
@@ -33,8 +61,8 @@ mybatis:
 
 # wechat
 wechat:
-  appID: wxe5e6344d65b3d478
-  appSecret: 297f7852f643336bc6383377ea909968
+  appID:
+  appSecret:
 
 # melody
 javamelody:
@@ -57,4 +85,4 @@ qiniu:
   backSecretKey: 2a640bf3701da3e7
   # 服务器地址,请根据部署的服务器进行变更,推荐使用内网穿透进行测试
   backUrl: http://time.huanglexing.com/time/uploadBack
-  cloudUrl: cloud.huanglexing.com/
+  cloudUrl: http://cloud.huanglexing.com/
