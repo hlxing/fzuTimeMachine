@@ -70,7 +70,7 @@
 
 	<select id="getByUserId" resultType="Time">
 		SELECT
-		imgUrl, content, location, createTime, updateTime, praiseNum
+		id, imgUrl, content, location, createTime, updateTime, praiseNum
 		FROM
 			time
 	  	WHERE
@@ -110,11 +110,13 @@
 
     <select id="getMap" resultType="Time">
         SELECT
-        longitude,latitude,id
+		longitude,latitude,id
         FROM
-        time
+		time
         WHERE
-        visible = 1
+		visible = 1
+		ORDER BY
+		createTime DESC
     </select>
 
 </mapper>  

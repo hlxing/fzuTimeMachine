@@ -54,14 +54,13 @@ public class UserServiceImpl implements UserService {
         }
         WechatUser test = userDao.getByOpenId(jscode2session.getOpenid());
         if (test != null) {
-            throw new ApiException(UserErrorEnum.EXIST);
+            initSession(request, test.getUserId(), jscode2session.getSessionKey());
+        } else {
+            WechatUser wechatUser = WechatUtil.decryptUser(jscode2session.getSessionKey(), userOAuthDTO.getEncryptedData(), userOAuthDTO.getIvStr());
+            wechatUser.setCreateTime(System.currentTimeMillis() / 1000);
+            userDao.save(wechatUser);
+            initSession(request, wechatUser.getUserId(), jscode2session.getSessionKey());
         }
-
-        WechatUser wechatUser = WechatUtil.decryptUser(jscode2session.getSessionKey(), userOAuthDTO.getEncryptedData(), userOAuthDTO.getIvStr());
-        wechatUser.setCreateTime(System.currentTimeMillis() / 1000);
-        userDao.save(wechatUser);
-
-        initSession(request, wechatUser.getUserId(), jscode2session.getSessionKey());
     }
 
     @Override
@@ -71,6 +70,7 @@ public class UserServiceImpl implements UserService {
         if (null == jscode2session) {
             throw new ApiException(UserErrorEnum.CODE_INVALID);
         }
+        log.info("openId->>" + jscode2session.getOpenid());
         WechatUser wechatUser = userDao.getByOpenId(jscode2session.getOpenid());
         if (null == wechatUser) {
             throw new ApiException(UserErrorEnum.OAUTH_NOT_FOUND);

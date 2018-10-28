@@ -74,9 +74,12 @@ public class UserController {
     @ApiOperation(value = "个人信息")
     @GetMapping("/me")
     public ApiResult<UserVO> getMe(HttpSession session) {
+        Long now = System.currentTimeMillis();
         ApiResult<UserVO> apiResult = new ApiResult<>();
         UserVO userVO = userService.getMe((Integer) session.getAttribute("userId"));
         apiResult.setData(userVO);
+        Long now2 = System.currentTimeMillis();
+        System.out.println(now2 - now);
         return apiResult;
     }
 

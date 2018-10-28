@@ -21,4 +21,5 @@ public interface UserDao {
     void updateSessionIdByUserId(@Param("userId") Integer userId, @Param("sessionId") String sessionId);
 
     WechatUser getInfo(Integer userId);
+
 }

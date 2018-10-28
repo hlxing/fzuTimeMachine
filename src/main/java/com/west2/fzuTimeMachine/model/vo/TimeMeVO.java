@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Data
 public class TimeMeVO implements Serializable{
 
+    private Integer id;
+
     private String imgUrl;
 
     private String content;

@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Data
 public class TimeUploadVO implements Serializable{
 
+    private String id;
+
     private String key;
 
     private String uploadToken;
