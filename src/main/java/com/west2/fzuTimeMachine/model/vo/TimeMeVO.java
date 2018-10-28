@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class TimeMeVO implements Serializable{
 
     private Integer id;
-
+  
     private String imgUrl;
 
     private String content;

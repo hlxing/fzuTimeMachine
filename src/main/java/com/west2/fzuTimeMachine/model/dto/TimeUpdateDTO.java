@@ -14,7 +14,7 @@ public class TimeUpdateDTO implements Serializable {
     private Integer timeId;
 
     private String content;
-
+  
     public TimeUpdateDTO() {
 
     }

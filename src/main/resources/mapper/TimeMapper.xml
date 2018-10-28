@@ -70,7 +70,7 @@
 
 	<select id="getByUserId" resultType="Time">
 		SELECT
-		id, imgUrl, content, location, createTime, updateTime, praiseNum
+		  id, imgUrl, content, location, createTime, updateTime, praiseNum
 		FROM
 			time
 	  	WHERE
@@ -78,7 +78,7 @@
 	</select>
 
 	<select id="getByUncheck" resultType="Time">
-		SELECT
+		  SELECT
 		id, userId, imgUrl, content
 		FROM
 			time

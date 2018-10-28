@@ -3,7 +3,6 @@ package com.west2.fzuTimeMachine.model.dto;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * @description: 时光上传回调的传输对象
