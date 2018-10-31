@@ -1,5 +1,7 @@
 package com.west2.fzuTimeMachine.scheduler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
 import com.west2.fzuTimeMachine.dao.TimeDao;
 import com.west2.fzuTimeMachine.dao.UserDao;
@@ -32,6 +34,8 @@ public class RankScheduler {
 
     private static final String RANK_KEY = "rank";
 
+    private static final String RANK_BAK_KEY = "rankBak";
+
     private RedisTemplate redisTemplate;
 
     private RedisService redisService;
@@ -42,19 +46,21 @@ public class RankScheduler {
 
     private ModelMapper modelMapper;
 
+    private ObjectMapper jsonMapper;
+
     @Autowired
     public RankScheduler(RedisTemplate redisTemplate, TimeDao timeDao,
                          ModelMapper modelMapper, UserDao userDao,
-                         RedisService redisService) {
+                         RedisService redisService, ObjectMapper jsonMapper) {
         this.redisTemplate = redisTemplate;
         this.timeDao = timeDao;
         this.modelMapper = modelMapper;
         this.userDao = userDao;
         this.redisService = redisService;
+        this.jsonMapper = jsonMapper;
     }
 
-
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0 1/2 * * ?")
     public void calculateRank() {
         String value = String.valueOf(System.currentTimeMillis());
         boolean getLock = redisService.tryLock("rank", value);
@@ -63,6 +69,8 @@ public class RankScheduler {
             push();
             redisService.unLock("rank", value);
             log.info("unlock success");
+        } else {
+            log.info("get lock fail");
         }
     }
 
@@ -84,13 +92,29 @@ public class RankScheduler {
         // 清空排行榜
         redisTemplate.delete(RANK_KEY);
 
-        timeTopRankDTOS.forEach((timeRankDTO) -> {
+        byte[][] keysAndArgs = new byte[timeTopRankDTOS.size() + 1][];
+        keysAndArgs[0] = RANK_KEY.getBytes();
+
+        for (int i = 0; i < RANK_SIZE && i < timeTopRankDTOS.size(); i++) {
+            TimeRankDTO timeRankDTO = timeTopRankDTOS.get(i);
             TimeRankVO timeRankVO = modelMapper.map(timeRankDTO, TimeRankVO.class);
             WechatUser wechatUser = userDao.get(timeRankDTO.getUserId());
             timeRankVO.setAvatarUrl(wechatUser.getAvatarUrl());
             timeRankVO.setNickName(wechatUser.getNickName());
-            redisTemplate.opsForList().rightPush(RANK_KEY, timeRankVO);
-        });
+            try {
+                keysAndArgs[i + 1] = jsonMapper.writeValueAsBytes(timeRankVO);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 原子性批量添加,防止读取到不完整数据
+        redisService.addRank(keysAndArgs);
+
+        // 重建备份数据,用于在数据刷新期间的平滑过渡
+        redisTemplate.delete(RANK_BAK_KEY);
+        keysAndArgs[0] = RANK_BAK_KEY.getBytes();
+        redisService.addRank(keysAndArgs);
     }
 
 }
