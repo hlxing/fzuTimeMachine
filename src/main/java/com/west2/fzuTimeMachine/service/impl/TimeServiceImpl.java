@@ -47,12 +47,16 @@ public class TimeServiceImpl implements TimeService {
 
     private static final String RANK_KEY = "rank";
 
+    private static final String RANK_BAK_KEY = "rankBak";
+
     private TimeDao timeDao;
 
     private TimePraiseDao timePraiseDao;
 
     private TimeCollectionDao timeCollectionDao;
+
     private UserDao userDao;
+
     private RedisTemplate redisTemplate;
 
     @Autowired
@@ -247,7 +251,11 @@ public class TimeServiceImpl implements TimeService {
     @SuppressWarnings("unchecked")
     @Override
     public List<TimeRankVO> getRank() {
-        return redisTemplate.opsForList().range(RANK_KEY, 0, -1);
+        List<TimeRankVO> timeRankVOS = redisTemplate.opsForList().range(RANK_KEY, 0, -1);
+        if (timeRankVOS != null && timeRankVOS.size() == 0) {
+            timeRankVOS = redisTemplate.opsForList().range(RANK_BAK_KEY, 0, -1);
+        }
+        return timeRankVOS;
     }
 
     @Override

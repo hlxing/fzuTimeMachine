@@ -1,8 +1,11 @@
 package com.west2.fzuTimeMachine.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisPassword;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
 import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
@@ -16,11 +19,28 @@ import org.springframework.session.web.http.HttpSessionIdResolver;
 @EnableSpringHttpSession
 public class HttpSessionConfig {
 
+    @Value("${spring.redis.host}")
+    private String host;
+
+    @Value("${spring.redis.port}")
+    private int port;
+
+    @Value("${spring.redis.password}")
+    private String password;
+
+    @Value("${spring.redis.database}")
+    private int database;
+
     //存储容器连接池
     @Bean
-    @ConfigurationProperties(prefix = "spring.redis")
     public LettuceConnectionFactory connectionFactory() {
-        return new LettuceConnectionFactory();
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+        config.setDatabase(database);
+        config.setPassword(RedisPassword.of(password));
+        config.setPort(port);
+        config.setHostName(host);
+
+        return new LettuceConnectionFactory(config);
     }
 
     //通过头部传递session

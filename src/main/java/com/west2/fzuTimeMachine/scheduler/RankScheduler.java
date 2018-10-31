@@ -1,5 +1,7 @@
 package com.west2.fzuTimeMachine.scheduler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
 import com.west2.fzuTimeMachine.dao.TimeDao;
 import com.west2.fzuTimeMachine.dao.UserDao;
@@ -7,6 +9,7 @@ import com.west2.fzuTimeMachine.model.dto.TimeRankDTO;
 import com.west2.fzuTimeMachine.model.po.Time;
 import com.west2.fzuTimeMachine.model.po.WechatUser;
 import com.west2.fzuTimeMachine.model.vo.TimeRankVO;
+import com.west2.fzuTimeMachine.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,24 +31,51 @@ import java.util.List;
 public class RankScheduler {
 
     private static final int RANK_SIZE = 10;
+
     private static final String RANK_KEY = "rank";
+
+    private static final String RANK_BAK_KEY = "rankBak";
+
     private RedisTemplate redisTemplate;
+
+    private RedisService redisService;
+
     private TimeDao timeDao;
+
     private UserDao userDao;
+
     private ModelMapper modelMapper;
+
+    private ObjectMapper jsonMapper;
 
     @Autowired
     public RankScheduler(RedisTemplate redisTemplate, TimeDao timeDao,
-                         ModelMapper modelMapper, UserDao userDao) {
+                         ModelMapper modelMapper, UserDao userDao,
+                         RedisService redisService, ObjectMapper jsonMapper) {
         this.redisTemplate = redisTemplate;
         this.timeDao = timeDao;
         this.modelMapper = modelMapper;
         this.userDao = userDao;
+        this.redisService = redisService;
+        this.jsonMapper = jsonMapper;
+    }
+
+    @Scheduled(cron = "0 0 1/2 * * ?")
+    public void calculateRank() {
+        String value = String.valueOf(System.currentTimeMillis());
+        boolean getLock = redisService.tryLock("rank", value);
+        if (getLock) {
+            log.info("get lock success");
+            push();
+            redisService.unLock("rank", value);
+            log.info("unlock success");
+        } else {
+            log.info("get lock fail");
+        }
     }
 
     @SuppressWarnings("unchecked")
-    @Scheduled(cron = "0 0/1 * * * *")
-    public void calculateRank() {
+    private void push() {
         Long now = System.currentTimeMillis();
         List<Time> timeList = timeDao.getAllByVisible(1);
         List<TimeRankDTO> timeRankDTOS = new ArrayList<>();
@@ -58,20 +88,33 @@ public class RankScheduler {
         }
         Collections.sort(timeRankDTOS);
         List<TimeRankDTO> timeTopRankDTOS = Ordering.natural().greatestOf(timeRankDTOS, RANK_SIZE);
-        //Long now2 = System.currentTimeMillis();
-        // log.info("cal-rank t->> " + (now2 - now));
 
         // 清空排行榜
         redisTemplate.delete(RANK_KEY);
 
-        timeTopRankDTOS.forEach((timeRankDTO) -> {
+        byte[][] keysAndArgs = new byte[timeTopRankDTOS.size() + 1][];
+        keysAndArgs[0] = RANK_KEY.getBytes();
+
+        for (int i = 0; i < RANK_SIZE && i < timeTopRankDTOS.size(); i++) {
+            TimeRankDTO timeRankDTO = timeTopRankDTOS.get(i);
             TimeRankVO timeRankVO = modelMapper.map(timeRankDTO, TimeRankVO.class);
             WechatUser wechatUser = userDao.get(timeRankDTO.getUserId());
             timeRankVO.setAvatarUrl(wechatUser.getAvatarUrl());
             timeRankVO.setNickName(wechatUser.getNickName());
-            redisTemplate.opsForList().rightPush(RANK_KEY, timeRankVO);
-        });
+            try {
+                keysAndArgs[i + 1] = jsonMapper.writeValueAsBytes(timeRankVO);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
 
+        // 原子性批量添加,防止读取到不完整数据
+        redisService.addRank(keysAndArgs);
+
+        // 重建备份数据,用于在数据刷新期间的平滑过渡
+        redisTemplate.delete(RANK_BAK_KEY);
+        keysAndArgs[0] = RANK_BAK_KEY.getBytes();
+        redisService.addRank(keysAndArgs);
     }
 
 }
